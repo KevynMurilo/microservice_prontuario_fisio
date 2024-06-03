@@ -4,12 +4,12 @@ CREATE TYPE "StatusTonus" AS ENUM ('NORMAL', 'ALTERADO');
 -- CreateTable
 CREATE TABLE "prontuarios" (
     "id_prontuario" SERIAL NOT NULL,
-    "unidade" TEXT NOT NULL,
-    "setor_atendimento" TEXT NOT NULL,
-    "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "id_paciente" INTEGER NOT NULL,
     "id_fisioterapeuta" INTEGER NOT NULL,
     "id_coordenador" INTEGER NOT NULL,
+    "unidade" TEXT NOT NULL,
+    "setor_atendimento" TEXT NOT NULL,
+    "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "responsavel" TEXT,
     "caso_emergencia_avisar" TEXT,
     "telefone_emergencia" TEXT,
@@ -22,6 +22,8 @@ CREATE TABLE "prontuarios" (
     "altura" DECIMAL(65,30) NOT NULL,
     "estado_geral" TEXT NOT NULL,
     "independencia_de_locomocao" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "prontuarios_pkey" PRIMARY KEY ("id_prontuario")
 );
@@ -29,11 +31,13 @@ CREATE TABLE "prontuarios" (
 -- CreateTable
 CREATE TABLE "anamnese" (
     "id_anamnese" SERIAL NOT NULL,
+    "id_prontuario" INTEGER NOT NULL,
     "queixa_principal" TEXT NOT NULL,
     "hma" TEXT NOT NULL,
     "hmp" TEXT NOT NULL,
     "avd" TEXT NOT NULL,
-    "id_prontuario" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "anamnese_pkey" PRIMARY KEY ("id_anamnese")
 );
@@ -41,10 +45,12 @@ CREATE TABLE "anamnese" (
 -- CreateTable
 CREATE TABLE "cirurgias" (
     "id_cirurgia" SERIAL NOT NULL,
+    "id_anamnese" INTEGER NOT NULL,
     "realizou" BOOLEAN NOT NULL,
     "quais" TEXT,
     "resultados_exames" TEXT,
-    "id_anamnese" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "cirurgias_pkey" PRIMARY KEY ("id_cirurgia")
 );
@@ -52,10 +58,12 @@ CREATE TABLE "cirurgias" (
 -- CreateTable
 CREATE TABLE "doencas_concomitantes" (
     "id_doencas_concomitantes" SERIAL NOT NULL,
+    "id_anamnese" INTEGER NOT NULL,
     "dm" BOOLEAN NOT NULL,
     "has" BOOLEAN NOT NULL,
     "outros" TEXT,
-    "id_anamnese" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "doencas_concomitantes_pkey" PRIMARY KEY ("id_doencas_concomitantes")
 );
@@ -63,6 +71,7 @@ CREATE TABLE "doencas_concomitantes" (
 -- CreateTable
 CREATE TABLE "exames_fisicos" (
     "id_exames_fisicos" SERIAL NOT NULL,
+    "id_prontuario" INTEGER NOT NULL,
     "pa" TEXT NOT NULL,
     "fc" TEXT NOT NULL,
     "fr" TEXT NOT NULL,
@@ -92,7 +101,8 @@ CREATE TABLE "exames_fisicos" (
     "inspecao" TEXT,
     "palpacao" TEXT,
     "mensuracao" TEXT,
-    "id_prontuario" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "exames_fisicos_pkey" PRIMARY KEY ("id_exames_fisicos")
 );
@@ -100,10 +110,12 @@ CREATE TABLE "exames_fisicos" (
 -- CreateTable
 CREATE TABLE "forca_muscular" (
     "id_forca_muscular" SERIAL NOT NULL,
+    "id_exames_fisicos" INTEGER NOT NULL,
     "musculo" TEXT,
     "grupo" TEXT,
     "grau" TEXT,
-    "id_exames_fisicos" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "forca_muscular_pkey" PRIMARY KEY ("id_forca_muscular")
 );
@@ -111,10 +123,12 @@ CREATE TABLE "forca_muscular" (
 -- CreateTable
 CREATE TABLE "adm" (
     "id_adm" SERIAL NOT NULL,
+    "id_exames_fisicos" INTEGER NOT NULL,
     "movimento" TEXT,
     "ativa" TEXT,
     "passiva" TEXT,
-    "id_exames_fisicos" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "adm_pkey" PRIMARY KEY ("id_adm")
 );
@@ -122,6 +136,7 @@ CREATE TABLE "adm" (
 -- CreateTable
 CREATE TABLE "complementos" (
     "id_complementos" SERIAL NOT NULL,
+    "id_exames_fisicos" INTEGER NOT NULL,
     "sensibilidade" TEXT NOT NULL,
     "dor" INTEGER NOT NULL,
     "clonus" TEXT NOT NULL,
@@ -131,7 +146,8 @@ CREATE TABLE "complementos" (
     "avaliacao_funcional" TEXT NOT NULL,
     "observacoes" TEXT,
     "exames_complementares_ou_laudos" TEXT,
-    "id_exames_fisicos" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "complementos_pkey" PRIMARY KEY ("id_complementos")
 );
@@ -139,8 +155,10 @@ CREATE TABLE "complementos" (
 -- CreateTable
 CREATE TABLE "objetivos" (
     "id_objetivo" SERIAL NOT NULL,
-    "descricao_objetivo_fisioterapeutico" TEXT NOT NULL,
     "id_prontuario" INTEGER NOT NULL,
+    "descricao_objetivo_fisioterapeutico" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "objetivos_pkey" PRIMARY KEY ("id_objetivo")
 );
@@ -148,8 +166,10 @@ CREATE TABLE "objetivos" (
 -- CreateTable
 CREATE TABLE "condutas" (
     "id_conduta" SERIAL NOT NULL,
-    "descricao_conduta_fisioterapeutica" TEXT NOT NULL,
     "id_prontuario" INTEGER NOT NULL,
+    "descricao_conduta_fisioterapeutica" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "condutas_pkey" PRIMARY KEY ("id_conduta")
 );

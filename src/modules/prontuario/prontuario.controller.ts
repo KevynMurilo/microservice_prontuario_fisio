@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ProntuarioService } from './prontuario.service';
 import { CreateProntuarioDto } from './dto/create-prontuario.dto';
 
@@ -18,9 +18,21 @@ export class ProntuarioController {
     return prontuarios;
   }
 
+  @Get('deletados')
+  async findDelet() {
+    const prontuariosDeletados = await this.prontuarioService.findDeleted();
+    return prontuariosDeletados;
+  }
+
   @Get(':id')
   async findById(@Param('id') id: number) {
     const prontuario = await this.prontuarioService.findByIdPacient(+id);
+    return prontuario;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    const prontuario = await this.prontuarioService.delete(+id);
     return prontuario;
   }
 }

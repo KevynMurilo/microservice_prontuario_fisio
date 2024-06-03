@@ -25,14 +25,30 @@ export class ProntuarioService {
   async findall() {
     const prontuarios = await this.prontuarioRepository.findAll();
     if (prontuarios.length === 0)
-      throw new NotFoundException('Nenhum prontuário encontrado');
+      throw new NotFoundException('Prontuário não encontrado');
     return prontuarios;
+  }
+
+  async findDeleted() {
+    const prontuariosDeletados = await this.prontuarioRepository.findDeleted();
+    if (prontuariosDeletados.length === 0)
+      throw new NotFoundException('Nenhum prontuário deletado');
+    return prontuariosDeletados;
   }
 
   async findByIdPacient(id: number) {
     const prontuario = await this.prontuarioRepository.findByIdPacient(id);
-    if (!prontuario)
-      throw new NotFoundException('Nenhum prontuário encontrado');
+    if (!prontuario) throw new NotFoundException('Prontuário não encontrado');
     return prontuario;
+  }
+
+  async delete(id: number) {
+    const verify = await this.prontuarioRepository.prontuarioExiste(id);
+    if (!verify) throw new NotFoundException('Prontuário não encontrado');
+
+    const deleteProntuario = await this.prontuarioRepository.delete(id);
+    return {
+      message: `Prontuário ${deleteProntuario.id_prontuario} deletado com sucesso`,
+    };
   }
 }

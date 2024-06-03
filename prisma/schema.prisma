@@ -9,12 +9,12 @@ datasource db {
 
 model Prontuario {
   id_prontuario              Int           @id @default(autoincrement())
-  unidade                    String
-  setor_atendimento          String
-  data                       DateTime      @default(now())
   id_paciente                Int
   id_fisioterapeuta          Int
   id_coordenador             Int
+  unidade                    String
+  setor_atendimento          String
+  data                       DateTime      @default(now())
   responsavel                String?
   caso_emergencia_avisar     String?
   telefone_emergencia        String?
@@ -27,6 +27,8 @@ model Prontuario {
   altura                     Decimal
   estado_geral               String
   independencia_de_locomocao String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   anamnese                   Anamnese?
   conduta                    Conduta[]
   exampes_fisicos            Exame_Fisico?
@@ -37,11 +39,13 @@ model Prontuario {
 
 model Anamnese {
   id_anamnese           Int                   @id @default(autoincrement())
+  id_prontuario         Int                   @unique
   queixa_principal      String
   hma                   String
   hmp                   String
   avd                   String
-  id_prontuario         Int                   @unique
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   prontuario            Prontuario            @relation(fields: [id_prontuario], references: [id_prontuario])
   cirurgia              Cirurgia[]
   doencas_concomitantes Doenca_concomitante[]
@@ -51,10 +55,12 @@ model Anamnese {
 
 model Cirurgia {
   id_cirurgia       Int      @id @default(autoincrement())
+  id_anamnese       Int
   realizou          Boolean
   quais             String?
   resultados_exames String?
-  id_anamnese       Int
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   anamnese          Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
 
   @@map("cirurgias")
@@ -62,10 +68,12 @@ model Cirurgia {
 
 model Doenca_concomitante {
   id_doencas_concomitantes Int      @id @default(autoincrement())
+  id_anamnese              Int
   dm                       Boolean
   has                      Boolean
   outros                   String?
-  id_anamnese              Int
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   anamnese                 Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
 
   @@map("doencas_concomitantes")
@@ -73,6 +81,7 @@ model Doenca_concomitante {
 
 model Exame_Fisico {
   id_exames_fisicos               Int              @id @default(autoincrement())
+  id_prontuario                   Int              @unique
   pa                              String
   fc                              String
   fr                              String
@@ -102,7 +111,8 @@ model Exame_Fisico {
   inspecao                        String?
   palpacao                        String?
   mensuracao                      String?
-  id_prontuario                   Int              @unique
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   adm                             Adm[]
   complementos                    Complemento?
   prontuario                      Prontuario       @relation(fields: [id_prontuario], references: [id_prontuario])
@@ -113,10 +123,12 @@ model Exame_Fisico {
 
 model Forca_muscular {
   id_forca_muscular Int          @id @default(autoincrement())
+  id_exames_fisicos Int
   musculo           String?
   grupo             String?
   grau              String?
-  id_exames_fisicos Int
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
 
   @@map("forca_muscular")
@@ -124,10 +136,12 @@ model Forca_muscular {
 
 model Adm {
   id_adm            Int          @id @default(autoincrement())
+  id_exames_fisicos Int
   movimento         String?
   ativa             String?
   passiva           String?
-  id_exames_fisicos Int
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
 
   @@map("adm")
@@ -135,6 +149,7 @@ model Adm {
 
 model Complemento {
   id_complementos                 Int          @id @default(autoincrement())
+  id_exames_fisicos               Int          @unique
   sensibilidade                   String
   dor                             Int
   clonus                          String
@@ -144,7 +159,8 @@ model Complemento {
   avaliacao_funcional             String
   observacoes                     String?
   exames_complementares_ou_laudos String?
-  id_exames_fisicos               Int          @unique
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   exames_fisicos                  Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
 
   @@map("complementos")
@@ -152,8 +168,10 @@ model Complemento {
 
 model Objetivo {
   id_objetivo                         Int        @id @default(autoincrement())
-  descricao_objetivo_fisioterapeutico String
   id_prontuario                       Int
+  descricao_objetivo_fisioterapeutico String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   prontuario                          Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
 
   @@map("objetivos")
@@ -161,8 +179,10 @@ model Objetivo {
 
 model Conduta {
   id_conduta                         Int        @id @default(autoincrement())
-  descricao_conduta_fisioterapeutica String
   id_prontuario                      Int
+  descricao_conduta_fisioterapeutica String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
   prontuario                         Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
 
   @@map("condutas")
