@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Prontuario {
+  id_prontuario              Int           @id @default(autoincrement())
+  id_paciente                Int
+  id_fisioterapeuta          Int
+  id_coordenador             Int
+  unidade                    String
+  setor_atendimento          String
+  data                       DateTime      @default(now())
+  responsavel                String?
+  caso_emergencia_avisar     String?
+  telefone_emergencia        String?
+  diagnostico_clinico        String
+  medico_responsavel         String
+  diagnostico_fisoterapeuta  String
+  antecendentes_familiar     String?
+  patologias_associadas      String?
+  peso                       Decimal
+  altura                     Decimal
+  estado_geral               String
+  independencia_de_locomocao String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  anamnese                   Anamnese?
+  conduta                    Conduta[]
+  exampes_fisicos            Exame_Fisico?
+  objetivo                   Objetivo[]
+
+  @@map("prontuarios")
+}
+
+model Anamnese {
+  id_anamnese           Int                   @id @default(autoincrement())
+  id_prontuario         Int                   @unique
+  queixa_principal      String
+  hma                   String
+  hmp                   String
+  avd                   String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  prontuario            Prontuario            @relation(fields: [id_prontuario], references: [id_prontuario])
+  cirurgia              Cirurgia[]
+  doencas_concomitantes Doenca_concomitante[]
+
+  @@map("anamnese")
+}
+
+model Cirurgia {
+  id_cirurgia       Int      @id @default(autoincrement())
+  id_anamnese       Int
+  realizou          Boolean
+  quais             String?
+  resultados_exames String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  anamnese          Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
+
+  @@map("cirurgias")
+}
+
+model Doenca_concomitante {
+  id_doencas_concomitantes Int      @id @default(autoincrement())
+  id_anamnese              Int
+  dm                       Boolean
+  has                      Boolean
+  outros                   String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  anamnese                 Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
+
+  @@map("doencas_concomitantes")
+}
+
+model Exame_Fisico {
+  id_exames_fisicos               Int              @id @default(autoincrement())
+  id_prontuario                   Int              @unique
+  pa                              String
+  fc                              String
+  fr                              String
+  ap                              String
+  spo2                            String
+  temp                            String
+  exames_especificos              String
+  tonus_moscular                  StatusTonus
+  tipo_tonus                      String?
+  grau_tonus                      String?
+  local_tonus                     String?
+  distrubuicao_topografica        String
+  percepcao                       String?
+  coordenacao_dinamica_e_estatica String
+  triciptal                       Boolean
+  biciptal                        Boolean
+  radial                          Boolean
+  patelar                         Boolean
+  calcanear                       Boolean
+  cutaneo_abdominal               Boolean
+  cutaneo_plantar                 Boolean
+  contraturas_deformidades        Boolean
+  ulceras                         Boolean
+  local_ulceras                   String?
+  deambula                        Boolean
+  descricao_deambula              String?
+  inspecao                        String?
+  palpacao                        String?
+  mensuracao                      String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  adm                             Adm[]
+  complementos                    Complemento?
+  prontuario                      Prontuario       @relation(fields: [id_prontuario], references: [id_prontuario])
+  forca_muscular                  Forca_muscular[]
+
+  @@map("exames_fisicos")
+}
+
+model Forca_muscular {
+  id_forca_muscular Int          @id @default(autoincrement())
+  id_exames_fisicos Int
+  musculo           String?
+  grupo             String?
+  grau              String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+
+  @@map("forca_muscular")
+}
+
+model Adm {
+  id_adm            Int          @id @default(autoincrement())
+  id_exames_fisicos Int
+  movimento         String?
+  ativa             String?
+  passiva           String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+
+  @@map("adm")
+}
+
+model Complemento {
+  id_complementos                 Int          @id @default(autoincrement())
+  id_exames_fisicos               Int          @unique
+  sensibilidade                   String
+  dor                             Int
+  clonus                          String
+  reflexo_ou_reacoes              String
+  ausculta_cardiaca               String
+  testes_especiais                String
+  avaliacao_funcional             String
+  observacoes                     String?
+  exames_complementares_ou_laudos String?
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  exames_fisicos                  Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+
+  @@map("complementos")
+}
+
+model Objetivo {
+  id_objetivo                         Int        @id @default(autoincrement())
+  id_prontuario                       Int
+  descricao_objetivo_fisioterapeutico String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  prontuario                          Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
+
+  @@map("objetivos")
+}
+
+model Conduta {
+  id_conduta                         Int        @id @default(autoincrement())
+  id_prontuario                      Int
+  descricao_conduta_fisioterapeutica String
+  created_at DateTime @default(now())
+  deleted_at DateTime?
+  prontuario                         Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
+
+  @@map("condutas")
+}
+
+enum StatusTonus {
+  NORMAL
+  ALTERADO
+}
