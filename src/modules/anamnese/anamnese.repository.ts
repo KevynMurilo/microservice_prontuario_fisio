@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateAnamneseDto } from './dto/create-anamnese.dto';
+import { CreateCirurgiaDto } from './dto/create-cirurgia.dto';
+import { CreateDoencaDto } from './dto/create-doenca.dto';
 
 @Injectable()
 export class AnamneseRepository {
@@ -25,30 +27,30 @@ export class AnamneseRepository {
 
   async createCirurgia(
     trx: Prisma.TransactionClient,
-    createAnamneseDto: CreateAnamneseDto,
+    createCirurgiaDto: CreateCirurgiaDto,
     id_anamnese: number,
   ) {
     return trx.cirurgia.create({
       data: {
         id_anamnese: id_anamnese,
-        realizou: createAnamneseDto.realizou,
-        quais: createAnamneseDto.quais,
-        resultados_exames: createAnamneseDto.resultados_exames,
+        realizou: createCirurgiaDto.realizou,
+        quais: createCirurgiaDto.quais,
+        resultados_exames: createCirurgiaDto.resultados_exames,
       },
     });
   }
 
   async createDoencaConcomitante(
     trx: Prisma.TransactionClient,
-    createAnamneseDto: CreateAnamneseDto,
+    createDoencaDto: CreateDoencaDto,
     id_anamnese: number,
   ) {
     return trx.doenca_concomitante.create({
       data: {
         id_anamnese: id_anamnese,
-        dm: createAnamneseDto.dm,
-        has: createAnamneseDto.has,
-        outros: createAnamneseDto.outros,
+        dm: createDoencaDto.dm,
+        has: createDoencaDto.has,
+        outros: createDoencaDto.outros,
       },
     });
   }

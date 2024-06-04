@@ -1,4 +1,12 @@
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { CreateCirurgiaDto } from './create-cirurgia.dto';
+import { CreateDoencaDto } from './create-doenca.dto';
 
 export class CreateAnamneseDto {
   @IsString()
@@ -13,27 +21,15 @@ export class CreateAnamneseDto {
   @IsString()
   avd: string;
 
-  @IsOptional()
-  @IsBoolean()
-  realizou: boolean;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateCirurgiaDto)
+  @ArrayMinSize(1)
+  cirurgias: CreateCirurgiaDto[];
 
-  @IsOptional()
-  @IsString()
-  quais?: string;
-
-  @IsOptional()
-  @IsString()
-  resultados_exames?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  dm: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  has: boolean;
-
-  @IsOptional()
-  @IsString()
-  outros?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDoencaDto)
+  @ArrayMinSize(1)
+  doencas_concomitantes: CreateDoencaDto[];
 }

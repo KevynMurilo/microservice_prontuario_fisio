@@ -19,21 +19,25 @@ export class AnamneseService {
     );
 
     let cirurgia = null;
-    if (createAnamneseDto.realizou) {
-      cirurgia = await this.anamneseRepository.createCirurgia(
+    for (cirurgia of createAnamneseDto.cirurgias) {
+      if (cirurgia.realizou) {
+        await this.anamneseRepository.createCirurgia(
+          trx,
+          cirurgia,
+          anamnese.id_anamnese,
+        );
+      }
+    }
+
+    let doenca = null;
+    for (doenca of createAnamneseDto.doencas_concomitantes) {
+      await this.anamneseRepository.createDoencaConcomitante(
         trx,
-        createAnamneseDto,
+        doenca,
         anamnese.id_anamnese,
       );
     }
 
-    const doencaConcomitante =
-      await this.anamneseRepository.createDoencaConcomitante(
-        trx,
-        createAnamneseDto,
-        anamnese.id_anamnese,
-      );
-
-    return { anamnese, cirurgia, doencaConcomitante };
+    return { anamnese, cirurgia, doenca };
   }
 }
