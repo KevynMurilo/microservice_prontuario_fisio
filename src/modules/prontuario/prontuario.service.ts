@@ -27,26 +27,30 @@ export class ProntuarioService {
     private readonly condutasService: CondutasService,
   ) {}
 
-  async create(
+  async createProntuario(
+    trx: Prisma.TransactionClient,
+    createProntuarioDto: CreateProntuarioDto,
+  ) {
+    return this.prontuarioRepository.createProntuario(trx, createProntuarioDto);
+  }
+
+  async createFull(
     createProntuarioDto: CreateProntuarioDto,
     createAnamneseDto: CreateAnamneseDto,
     createExamesFisicosDto: CreateExamesFisicosDto,
     createObjetivoDto: CreateObjetivoDto[],
     createCondutaDto: CreateCondutaDto[],
   ) {
-    const verify = await this.prontuarioRepository.verificarPaciente(
+    const verify = await this.prontuarioRepository.getByPaciente(
       createProntuarioDto.id_paciente,
     );
     if (verify)
       throw new BadRequestException('Paciente já possui um prontuário');
 
     return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
-      const prontuario = await this.prontuarioRepository.createProntuario(
-        trx,
-        createProntuarioDto,
-      );
+      const prontuario = await this.createProntuario(trx, createProntuarioDto);
 
-      const anamnese = await this.anamneseService.create(
+      const anamnese = await this.anamneseService.createFull(
         trx,
         createAnamneseDto,
         prontuario.id_prontuario,
@@ -79,5 +83,12 @@ export class ProntuarioService {
     if (prontuarios.length === 0)
       throw new NotFoundException('Prontuário não encontrado');
     return prontuarios;
+  }
+
+  async findByPaciente(id: number) {
+    const prontuario = await this.prontuarioRepository.getByPaciente(id);
+    if (!prontuario) throw new NotFoundException('Prontuário não encontrado');
+
+    return prontuario;
   }
 }

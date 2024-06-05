@@ -4,14 +4,10 @@ import { CreateAnamneseDto } from './dto/create-anamnese.dto';
 import { CreateCirurgiaDto } from './dto/create-cirurgia.dto';
 import { CreateDoencaDto } from './dto/create-doenca.dto';
 import { AnamneseRepository } from './anamnese.repository';
-import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class AnamneseService {
-  constructor(
-    private readonly anamneseRepository: AnamneseRepository,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly anamneseRepository: AnamneseRepository) {}
 
   private async createAnamnese(
     trx: Prisma.TransactionClient,
@@ -61,7 +57,7 @@ export class AnamneseService {
     return results;
   }
 
-  async create(
+  async createFull(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
     id_prontuario: number,

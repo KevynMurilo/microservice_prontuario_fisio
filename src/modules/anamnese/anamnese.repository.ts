@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../database/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateAnamneseDto } from './dto/create-anamnese.dto';
 import { CreateCirurgiaDto } from './dto/create-cirurgia.dto';
@@ -7,8 +6,6 @@ import { CreateDoencaDto } from './dto/create-doenca.dto';
 
 @Injectable()
 export class AnamneseRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
   async createAnamnese(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,

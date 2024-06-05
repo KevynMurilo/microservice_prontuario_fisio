@@ -1,4 +1,3 @@
-import { PrismaService } from '../database/prisma.service';
 import { CreateExamesFisicosDto } from './dto/create-exames-fisicos.dto';
 import { Prisma } from '@prisma/client';
 import { CreateForcaMuscularDto } from './dto/create-forca-muscular.dto';
@@ -6,8 +5,6 @@ import { CreateAdmDto } from './dto/create-adm.dto';
 import { CreateComplementoDto } from './dto/create-complemento.dto';
 
 export class ExamesFisicosRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
   async createExamesFisicos(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
