@@ -1,43 +1,89 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateAnamneseDto } from './dto/create-anamnese.dto';
+import { CreateCirurgiaDto } from './dto/create-cirurgia.dto';
+import { CreateDoencaDto } from './dto/create-doenca.dto';
 import { AnamneseRepository } from './anamnese.repository';
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class AnamneseService {
-  constructor(private readonly anamneseRepository: AnamneseRepository) {}
+  constructor(
+    private readonly anamneseRepository: AnamneseRepository,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  private async createAnamnese(
+    trx: Prisma.TransactionClient,
+    createAnamneseDto: CreateAnamneseDto,
+    id_prontuario: number,
+  ) {
+    return await this.anamneseRepository.createAnamnese(
+      trx,
+      createAnamneseDto,
+      id_prontuario,
+    );
+  }
+
+  private async createCirurgias(
+    trx: Prisma.TransactionClient,
+    cirurgias: CreateCirurgiaDto[],
+    id_anamnese: number,
+  ) {
+    const results = [];
+    for (const cirurgia of cirurgias) {
+      if (cirurgia.realizou) {
+        const result = await this.anamneseRepository.createCirurgia(
+          trx,
+          cirurgia,
+          id_anamnese,
+        );
+        results.push(result);
+      }
+    }
+    return results;
+  }
+
+  private async createDoencasConcomitantes(
+    trx: Prisma.TransactionClient,
+    doencas: CreateDoencaDto[],
+    id_anamnese: number,
+  ) {
+    const results = [];
+    for (const doenca of doencas) {
+      const result = await this.anamneseRepository.createDoencaConcomitante(
+        trx,
+        doenca,
+        id_anamnese,
+      );
+      results.push(result);
+    }
+    return results;
+  }
 
   async create(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
     id_prontuario: number,
   ) {
-    const anamnese = await this.anamneseRepository.createAnamnese(
+    const anamnese = await this.createAnamnese(
       trx,
       createAnamneseDto,
       id_prontuario,
     );
 
-    let cirurgia = null;
-    for (cirurgia of createAnamneseDto.cirurgias) {
-      if (cirurgia.realizou) {
-        await this.anamneseRepository.createCirurgia(
-          trx,
-          cirurgia,
-          anamnese.id_anamnese,
-        );
-      }
-    }
+    const cirurgias = await this.createCirurgias(
+      trx,
+      createAnamneseDto.cirurgias,
+      anamnese.id_anamnese,
+    );
 
-    let doenca = null;
-    for (doenca of createAnamneseDto.doencas_concomitantes) {
-      await this.anamneseRepository.createDoencaConcomitante(
-        trx,
-        doenca,
-        anamnese.id_anamnese,
-      );
-    }
+    const doencas = await this.createDoencasConcomitantes(
+      trx,
+      createAnamneseDto.doencas_concomitantes,
+      anamnese.id_anamnese,
+    );
 
-    return { anamnese, cirurgia, doenca };
+    return { anamnese, cirurgias, doencas };
   }
 }

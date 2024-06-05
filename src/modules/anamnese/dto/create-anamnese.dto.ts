@@ -2,6 +2,8 @@ import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
+  IsInt,
+  IsNotEmpty,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -9,6 +11,10 @@ import { CreateCirurgiaDto } from './create-cirurgia.dto';
 import { CreateDoencaDto } from './create-doenca.dto';
 
 export class CreateAnamneseDto {
+  @IsNotEmpty({ message: 'Id do prontuario é obrigatório' })
+  @IsInt()
+  id_prontuario: number;
+
   @IsString()
   queixa_principal: string;
 

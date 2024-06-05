@@ -79,7 +79,7 @@ CREATE TABLE "exames_fisicos" (
     "spo2" TEXT NOT NULL,
     "temp" TEXT NOT NULL,
     "exames_especificos" TEXT NOT NULL,
-    "tonus_moscular" "StatusTonus" NOT NULL,
+    "tonus_muscular" "StatusTonus" NOT NULL,
     "tipo_tonus" TEXT,
     "grau_tonus" TEXT,
     "local_tonus" TEXT,

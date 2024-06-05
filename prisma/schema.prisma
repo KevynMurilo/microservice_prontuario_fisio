@@ -89,7 +89,7 @@ model Exame_Fisico {
   spo2                            String
   temp                            String
   exames_especificos              String
-  tonus_moscular                  StatusTonus
+  tonus_muscular                  StatusTonus
   tipo_tonus                      String?
   grau_tonus                      String?
   local_tonus                     String?

@@ -8,8 +8,11 @@ export class ProntuarioController {
   @Post()
   async create(@Body() data: any) {
     const prontuario = await this.prontuarioService.create(
-      data.createProntuarioDto,
-      data.createAnamneseDto,
+      data.prontuario,
+      data.anamnese,
+      data.examesFisicos,
+      data.objetivos,
+      data.condutas,
     );
     return prontuario;
   }

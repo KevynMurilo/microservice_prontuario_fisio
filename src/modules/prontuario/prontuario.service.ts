@@ -9,6 +9,12 @@ import { PrismaService } from '../database/prisma.service';
 import { Prisma } from '@prisma/client';
 import { AnamneseService } from '../anamnese/anamnese.service';
 import { CreateAnamneseDto } from '../anamnese/dto/create-anamnese.dto';
+import { ExamesFisicosService } from '../exames_fisicos/exames_fisicos.service';
+import { CreateExamesFisicosDto } from '../exames_fisicos/dto/create-exames-fisicos.dto';
+import { ObjetivoService } from '../objetivo/objetivo.service';
+import { CreateObjetivoDto } from '../objetivo/dto/create-objetivo.dto';
+import { CondutasService } from '../condutas/condutas.service';
+import { CreateCondutaDto } from '../condutas/dto/create-conduta.dto';
 
 @Injectable()
 export class ProntuarioService {
@@ -16,11 +22,17 @@ export class ProntuarioService {
     private readonly prisma: PrismaService,
     private readonly prontuarioRepository: ProntuarioRepository,
     private readonly anamneseService: AnamneseService,
+    private readonly examesFisicosService: ExamesFisicosService,
+    private readonly objetivosService: ObjetivoService,
+    private readonly condutasService: CondutasService,
   ) {}
 
   async create(
     createProntuarioDto: CreateProntuarioDto,
     createAnamneseDto: CreateAnamneseDto,
+    createExamesFisicosDto: CreateExamesFisicosDto,
+    createObjetivoDto: CreateObjetivoDto[],
+    createCondutaDto: CreateCondutaDto[],
   ) {
     const verify = await this.prontuarioRepository.verificarPaciente(
       createProntuarioDto.id_paciente,
@@ -40,7 +52,25 @@ export class ProntuarioService {
         prontuario.id_prontuario,
       );
 
-      return { prontuario, anamnese };
+      const examesFisicos = await this.examesFisicosService.create(
+        trx,
+        createExamesFisicosDto,
+        prontuario.id_prontuario,
+      );
+
+      const objetivos = await this.objetivosService.create(
+        trx,
+        createObjetivoDto,
+        prontuario.id_prontuario,
+      );
+
+      const condutas = await this.condutasService.create(
+        trx,
+        createCondutaDto,
+        prontuario.id_prontuario,
+      );
+
+      return { prontuario, anamnese, examesFisicos, objetivos, condutas };
     });
   }
 
