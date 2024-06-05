@@ -7,11 +7,120 @@ import { CreateProntuarioDto } from './dto/create-prontuario.dto';
 export class ProntuarioRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async verificarPaciente(id: number) {
+  async getByPaciente(id: number) {
     return await this.prisma.prontuario.findFirst({
       where: {
         id_paciente: id,
         deleted_at: null,
+      },
+      select: {
+        id_prontuario: true,
+        id_paciente: true,
+        id_fisioterapeuta: true,
+        id_coordenador: true,
+        unidade: true,
+        setor_atendimento: true,
+        data: true,
+        responsavel: true,
+        caso_emergencia_avisar: true,
+        telefone_emergencia: true,
+        diagnostico_clinico: true,
+        medico_responsavel: true,
+        diagnostico_fisoterapeuta: true,
+        antecendentes_familiar: true,
+        patologias_associadas: true,
+        peso: true,
+        altura: true,
+        estado_geral: true,
+        independencia_de_locomocao: true,
+        anamnese: {
+          select: {
+            cirurgia: {
+              select: {
+                realizou: true,
+                quais: true,
+                resultados_exames: true,
+              },
+            },
+            doencas_concomitantes: {
+              select: {
+                dm: true,
+                has: true,
+                outros: true,
+              },
+            },
+          },
+        },
+        exampes_fisicos: {
+          select: {
+            pa: true,
+            fc: true,
+            fr: true,
+            ap: true,
+            spo2: true,
+            temp: true,
+            exames_especificos: true,
+            tonus_muscular: true,
+            tipo_tonus: true,
+            grau_tonus: true,
+            local_tonus: true,
+            distrubuicao_topografica: true,
+            percepcao: true,
+            coordenacao_dinamica_e_estatica: true,
+            triciptal: true,
+            biciptal: true,
+            radial: true,
+            patelar: true,
+            calcanear: true,
+            cutaneo_abdominal: true,
+            cutaneo_plantar: true,
+            contraturas_deformidades: true,
+            ulceras: true,
+            local_ulceras: true,
+            deambula: true,
+            descricao_deambula: true,
+            inspecao: true,
+            palpacao: true,
+            mensuracao: true,
+            adm: {
+              select: {
+                movimento: true,
+                ativa: true,
+                passiva: true,
+              },
+            },
+            forca_muscular: {
+              select: {
+                musculo: true,
+                grupo: true,
+                grau: true,
+              },
+            },
+            complementos: {
+              select: {
+                sensibilidade: true,
+                dor: true,
+                clonus: true,
+                reflexo_ou_reacoes: true,
+                ausculta_cardiaca: true,
+                testes_especiais: true,
+                avaliacao_funcional: true,
+                observacoes: true,
+                exames_complementares_ou_laudos: true,
+              },
+            },
+          },
+        },
+        objetivo: {
+          select: {
+            descricao_objetivo_fisioterapeutico: true,
+          },
+        },
+        conduta: {
+          select: {
+            descricao_conduta_fisioterapeutica: true,
+          },
+        },
       },
     });
   }
@@ -42,27 +151,140 @@ export class ProntuarioRepository {
         independencia_de_locomocao:
           createProntuarioDto.independencia_de_locomocao,
       },
+      select: {
+        id_prontuario: true,
+        id_paciente: true,
+        id_fisioterapeuta: true,
+        id_coordenador: true,
+        unidade: true,
+        setor_atendimento: true,
+        data: true,
+        responsavel: true,
+        caso_emergencia_avisar: true,
+        telefone_emergencia: true,
+        diagnostico_clinico: true,
+        medico_responsavel: true,
+        diagnostico_fisoterapeuta: true,
+        antecendentes_familiar: true,
+        patologias_associadas: true,
+        peso: true,
+        altura: true,
+        estado_geral: true,
+        independencia_de_locomocao: true,
+      },
     });
   }
 
   async findAll() {
     return await this.prisma.prontuario.findMany({
-      include: {
+      select: {
+        id_prontuario: true,
+        id_paciente: true,
+        id_fisioterapeuta: true,
+        id_coordenador: true,
+        unidade: true,
+        setor_atendimento: true,
+        data: true,
+        responsavel: true,
+        caso_emergencia_avisar: true,
+        telefone_emergencia: true,
+        diagnostico_clinico: true,
+        medico_responsavel: true,
+        diagnostico_fisoterapeuta: true,
+        antecendentes_familiar: true,
+        patologias_associadas: true,
+        peso: true,
+        altura: true,
+        estado_geral: true,
+        independencia_de_locomocao: true,
         anamnese: {
-          include: {
-            cirurgia: true,
-            doencas_concomitantes: true,
+          select: {
+            cirurgia: {
+              select: {
+                realizou: true,
+                quais: true,
+                resultados_exames: true,
+              },
+            },
+            doencas_concomitantes: {
+              select: {
+                dm: true,
+                has: true,
+                outros: true,
+              },
+            },
           },
         },
         exampes_fisicos: {
-          include: {
-            adm: true,
-            forca_muscular: true,
-            complementos: true,
+          select: {
+            pa: true,
+            fc: true,
+            fr: true,
+            ap: true,
+            spo2: true,
+            temp: true,
+            exames_especificos: true,
+            tonus_muscular: true,
+            tipo_tonus: true,
+            grau_tonus: true,
+            local_tonus: true,
+            distrubuicao_topografica: true,
+            percepcao: true,
+            coordenacao_dinamica_e_estatica: true,
+            triciptal: true,
+            biciptal: true,
+            radial: true,
+            patelar: true,
+            calcanear: true,
+            cutaneo_abdominal: true,
+            cutaneo_plantar: true,
+            contraturas_deformidades: true,
+            ulceras: true,
+            local_ulceras: true,
+            deambula: true,
+            descricao_deambula: true,
+            inspecao: true,
+            palpacao: true,
+            mensuracao: true,
+            adm: {
+              select: {
+                movimento: true,
+                ativa: true,
+                passiva: true,
+              },
+            },
+            forca_muscular: {
+              select: {
+                musculo: true,
+                grupo: true,
+                grau: true,
+              },
+            },
+            complementos: {
+              select: {
+                sensibilidade: true,
+                dor: true,
+                clonus: true,
+                reflexo_ou_reacoes: true,
+                ausculta_cardiaca: true,
+                testes_especiais: true,
+                avaliacao_funcional: true,
+                observacoes: true,
+                exames_complementares_ou_laudos: true,
+              },
+            },
           },
         },
-        objetivo: true,
-        conduta: true,
+        objetivo: {
+          select: {
+            descricao_objetivo_fisioterapeutico: true,
+          },
+        },
+        conduta: {
+          select: {
+            descricao_conduta_fisioterapeutica: true,
+          },
+        },
       },
     });
   }

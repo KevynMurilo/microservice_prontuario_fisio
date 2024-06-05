@@ -1,10 +1,7 @@
-import { PrismaService } from '../database/prisma.service';
 import { CreateObjetivoDto } from './dto/create-objetivo.dto';
 import { Prisma } from '@prisma/client';
 
 export class ObjetivoRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
   async create(
     trx: Prisma.TransactionClient,
     createObjetivoDto: CreateObjetivoDto,

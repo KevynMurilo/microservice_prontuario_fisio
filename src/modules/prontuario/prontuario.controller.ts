@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProntuarioService } from './prontuario.service';
 
 @Controller('prontuario')
@@ -7,7 +7,7 @@ export class ProntuarioController {
 
   @Post()
   async create(@Body() data: any) {
-    const prontuario = await this.prontuarioService.create(
+    const prontuario = await this.prontuarioService.createFull(
       data.prontuario,
       data.anamnese,
       data.examesFisicos,
@@ -21,5 +21,11 @@ export class ProntuarioController {
   async findAll() {
     const prontuarios = await this.prontuarioService.findall();
     return prontuarios;
+  }
+
+  @Get('paciente/:id')
+  async getByPaciente(@Param('id') id: number) {
+    const prontuario = await this.prontuarioService.findByPaciente(+id);
+    return prontuario;
   }
 }
