@@ -4,7 +4,6 @@ import { PrismaService } from '../database/prisma.service';
 import { ObjetivoRepository } from './objetivo.repository';
 
 @Module({
-  controllers: [],
   providers: [ObjetivoService, ObjetivoRepository, PrismaService],
   exports: [ObjetivoService],
 })

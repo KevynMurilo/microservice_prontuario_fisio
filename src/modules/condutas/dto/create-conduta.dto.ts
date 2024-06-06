@@ -1,11 +1,14 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCondutaDto {
-  @IsInt()
-  @IsNotEmpty({ message: 'Id do prontuario é obrigatório' })
-  id_prontuario: number;
-
+  @ApiProperty({
+    example: 'Realizar exercícios de fortalecimento',
+    description: 'Descrição da conduta fisioterapêutica',
+  })
   @IsString()
-  @IsNotEmpty({ message: 'Descricao conduta fisioterapeutica é obrigatória' })
+  @IsNotEmpty({
+    message: 'A descrição da conduta fisioterapêutica é obrigatória',
+  })
   descricao_conduta_fisioterapeutica: string;
 }
