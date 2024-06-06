@@ -27,7 +27,7 @@ export class ProntuarioService {
     private readonly condutasService: CondutasService,
   ) {}
 
-  async createProntuario(
+  private async createProntuario(
     trx: Prisma.TransactionClient,
     createProntuarioDto: CreateProntuarioDto,
   ) {
@@ -53,13 +53,11 @@ export class ProntuarioService {
       const anamnese = await this.anamneseService.createFull(
         trx,
         createAnamneseDto,
-        prontuario.id_prontuario,
       );
 
       const examesFisicos = await this.examesFisicosService.create(
         trx,
         createExamesFisicosDto,
-        prontuario.id_prontuario,
       );
 
       const objetivos = await this.objetivosService.create(
@@ -81,7 +79,7 @@ export class ProntuarioService {
   async findall() {
     const prontuarios = await this.prontuarioRepository.findAll();
     if (prontuarios.length === 0)
-      throw new NotFoundException('Prontuário não encontrado');
+      throw new NotFoundException('Nenhum prontuário encontrado');
     return prontuarios;
   }
 

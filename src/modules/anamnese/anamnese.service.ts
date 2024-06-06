@@ -12,13 +12,8 @@ export class AnamneseService {
   private async createAnamnese(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
-    id_prontuario: number,
   ) {
-    return await this.anamneseRepository.createAnamnese(
-      trx,
-      createAnamneseDto,
-      id_prontuario,
-    );
+    return await this.anamneseRepository.createAnamnese(trx, createAnamneseDto);
   }
 
   private async createCirurgias(
@@ -60,13 +55,8 @@ export class AnamneseService {
   async createFull(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
-    id_prontuario: number,
   ) {
-    const anamnese = await this.createAnamnese(
-      trx,
-      createAnamneseDto,
-      id_prontuario,
-    );
+    const anamnese = await this.createAnamnese(trx, createAnamneseDto);
 
     const cirurgias = await this.createCirurgias(
       trx,

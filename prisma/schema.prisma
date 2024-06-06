@@ -38,15 +38,14 @@ model Prontuario {
 }
 
 model Anamnese {
-  id_anamnese           Int                   @id @default(autoincrement())
-  id_prontuario         Int                   @unique
+  id_anamnese           Int                   @id @default(autoincrement()) @unique
   queixa_principal      String
   hma                   String
   hmp                   String
   avd                   String
   created_at DateTime @default(now())
   deleted_at DateTime?
-  prontuario            Prontuario            @relation(fields: [id_prontuario], references: [id_prontuario])
+  prontuario            Prontuario            @relation(fields: [id_anamnese], references: [id_prontuario])
   cirurgia              Cirurgia[]
   doencas_concomitantes Doenca_concomitante[]
 
@@ -80,8 +79,7 @@ model Doenca_concomitante {
 }
 
 model Exame_Fisico {
-  id_exames_fisicos               Int              @id @default(autoincrement())
-  id_prontuario                   Int              @unique
+  id_exames_fisicos               Int              @id @default(autoincrement()) @unique
   pa                              String
   fc                              String
   fr                              String
@@ -115,7 +113,7 @@ model Exame_Fisico {
   deleted_at DateTime?
   adm                             Adm[]
   complementos                    Complemento?
-  prontuario                      Prontuario       @relation(fields: [id_prontuario], references: [id_prontuario])
+  prontuario                      Prontuario       @relation(fields: [id_exames_fisicos], references: [id_prontuario])
   forca_muscular                  Forca_muscular[]
 
   @@map("exames_fisicos")
@@ -148,8 +146,7 @@ model Adm {
 }
 
 model Complemento {
-  id_complementos                 Int          @id @default(autoincrement())
-  id_exames_fisicos               Int          @unique
+  id_complementos                 Int          @id @default(autoincrement()) @unique
   sensibilidade                   String
   dor                             Int
   clonus                          String
@@ -161,7 +158,7 @@ model Complemento {
   exames_complementares_ou_laudos String?
   created_at DateTime @default(now())
   deleted_at DateTime?
-  exames_fisicos                  Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+  exames_fisicos                  Exame_Fisico @relation(fields: [id_complementos], references: [id_exames_fisicos])
 
   @@map("complementos")
 }
