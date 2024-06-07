@@ -7,6 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Relatorio {
+  id_relatorio Int @id @default(autoincrement())
+  id_paciente Int
+  id_fisioterapeuta Int
+  data DateTime @default(now())
+  descricao String
+
+  @@map("relatorios")
+}
+
+model FichaEvolucao {
+  id_ficha_evolucao Int @id @default(autoincrement())
+  id_paciente Int
+  id_fisioterapeuta Int
+  data DateTime @default(now())
+  descricao String
+
+  @@map("ficha_de_evolução")
+}
+
 model Prontuario {
   id_prontuario              Int           @id @default(autoincrement())
   id_paciente                Int
