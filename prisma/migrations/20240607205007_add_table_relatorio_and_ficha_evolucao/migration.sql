@@ -2,6 +2,28 @@
 CREATE TYPE "StatusTonus" AS ENUM ('NORMAL', 'ALTERADO');
 
 -- CreateTable
+CREATE TABLE "relatorios" (
+    "id_relatorio" SERIAL NOT NULL,
+    "id_paciente" INTEGER NOT NULL,
+    "id_fisioterapeuta" INTEGER NOT NULL,
+    "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "descricao" TEXT NOT NULL,
+
+    CONSTRAINT "relatorios_pkey" PRIMARY KEY ("id_relatorio")
+);
+
+-- CreateTable
+CREATE TABLE "ficha_de_evolução" (
+    "id_ficha_evolucao" SERIAL NOT NULL,
+    "id_paciente" INTEGER NOT NULL,
+    "id_fisioterapeuta" INTEGER NOT NULL,
+    "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "descricao" TEXT NOT NULL,
+
+    CONSTRAINT "ficha_de_evolução_pkey" PRIMARY KEY ("id_ficha_evolucao")
+);
+
+-- CreateTable
 CREATE TABLE "prontuarios" (
     "id_prontuario" SERIAL NOT NULL,
     "id_paciente" INTEGER NOT NULL,
@@ -31,7 +53,6 @@ CREATE TABLE "prontuarios" (
 -- CreateTable
 CREATE TABLE "anamnese" (
     "id_anamnese" SERIAL NOT NULL,
-    "id_prontuario" INTEGER NOT NULL,
     "queixa_principal" TEXT NOT NULL,
     "hma" TEXT NOT NULL,
     "hmp" TEXT NOT NULL,
@@ -71,7 +92,6 @@ CREATE TABLE "doencas_concomitantes" (
 -- CreateTable
 CREATE TABLE "exames_fisicos" (
     "id_exames_fisicos" SERIAL NOT NULL,
-    "id_prontuario" INTEGER NOT NULL,
     "pa" TEXT NOT NULL,
     "fc" TEXT NOT NULL,
     "fr" TEXT NOT NULL,
@@ -136,7 +156,6 @@ CREATE TABLE "adm" (
 -- CreateTable
 CREATE TABLE "complementos" (
     "id_complementos" SERIAL NOT NULL,
-    "id_exames_fisicos" INTEGER NOT NULL,
     "sensibilidade" TEXT NOT NULL,
     "dor" INTEGER NOT NULL,
     "clonus" TEXT NOT NULL,
@@ -175,16 +194,16 @@ CREATE TABLE "condutas" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "anamnese_id_prontuario_key" ON "anamnese"("id_prontuario");
+CREATE UNIQUE INDEX "anamnese_id_anamnese_key" ON "anamnese"("id_anamnese");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "exames_fisicos_id_prontuario_key" ON "exames_fisicos"("id_prontuario");
+CREATE UNIQUE INDEX "exames_fisicos_id_exames_fisicos_key" ON "exames_fisicos"("id_exames_fisicos");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "complementos_id_exames_fisicos_key" ON "complementos"("id_exames_fisicos");
+CREATE UNIQUE INDEX "complementos_id_complementos_key" ON "complementos"("id_complementos");
 
 -- AddForeignKey
-ALTER TABLE "anamnese" ADD CONSTRAINT "anamnese_id_prontuario_fkey" FOREIGN KEY ("id_prontuario") REFERENCES "prontuarios"("id_prontuario") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "anamnese" ADD CONSTRAINT "anamnese_id_anamnese_fkey" FOREIGN KEY ("id_anamnese") REFERENCES "prontuarios"("id_prontuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cirurgias" ADD CONSTRAINT "cirurgias_id_anamnese_fkey" FOREIGN KEY ("id_anamnese") REFERENCES "anamnese"("id_anamnese") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -193,7 +212,7 @@ ALTER TABLE "cirurgias" ADD CONSTRAINT "cirurgias_id_anamnese_fkey" FOREIGN KEY 
 ALTER TABLE "doencas_concomitantes" ADD CONSTRAINT "doencas_concomitantes_id_anamnese_fkey" FOREIGN KEY ("id_anamnese") REFERENCES "anamnese"("id_anamnese") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "exames_fisicos" ADD CONSTRAINT "exames_fisicos_id_prontuario_fkey" FOREIGN KEY ("id_prontuario") REFERENCES "prontuarios"("id_prontuario") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "exames_fisicos" ADD CONSTRAINT "exames_fisicos_id_exames_fisicos_fkey" FOREIGN KEY ("id_exames_fisicos") REFERENCES "prontuarios"("id_prontuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "forca_muscular" ADD CONSTRAINT "forca_muscular_id_exames_fisicos_fkey" FOREIGN KEY ("id_exames_fisicos") REFERENCES "exames_fisicos"("id_exames_fisicos") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -202,7 +221,7 @@ ALTER TABLE "forca_muscular" ADD CONSTRAINT "forca_muscular_id_exames_fisicos_fk
 ALTER TABLE "adm" ADD CONSTRAINT "adm_id_exames_fisicos_fkey" FOREIGN KEY ("id_exames_fisicos") REFERENCES "exames_fisicos"("id_exames_fisicos") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "complementos" ADD CONSTRAINT "complementos_id_exames_fisicos_fkey" FOREIGN KEY ("id_exames_fisicos") REFERENCES "exames_fisicos"("id_exames_fisicos") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "complementos" ADD CONSTRAINT "complementos_id_complementos_fkey" FOREIGN KEY ("id_complementos") REFERENCES "exames_fisicos"("id_exames_fisicos") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "objetivos" ADD CONSTRAINT "objetivos_id_prontuario_fkey" FOREIGN KEY ("id_prontuario") REFERENCES "prontuarios"("id_prontuario") ON DELETE RESTRICT ON UPDATE CASCADE;
