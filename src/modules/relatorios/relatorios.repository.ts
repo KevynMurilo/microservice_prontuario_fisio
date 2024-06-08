@@ -15,4 +15,18 @@ export class RelatoriosRepository {
       },
     });
   }
+
+  async findMany() {
+    const relatorios = this.prisma.relatorio.findMany();
+    return relatorios;
+  }
+
+  async findByPaciente(id_paciente: number) {
+    const relatorio = await this.prisma.relatorio.findMany({
+      where: {
+        id_paciente: id_paciente,
+      },
+    });
+    return relatorio;
+  }
 }

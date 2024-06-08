@@ -15,4 +15,18 @@ export class FichaEvolucaoRepository {
       },
     });
   }
+
+  async findMany() {
+    const fichaEvolucao = this.prisma.fichaEvolucao.findMany();
+    return fichaEvolucao;
+  }
+
+  async findByPaciente(id_paciente: number) {
+    const fichaEvolucao = await this.prisma.fichaEvolucao.findMany({
+      where: {
+        id_paciente: id_paciente,
+      },
+    });
+    return fichaEvolucao;
+  }
 }
