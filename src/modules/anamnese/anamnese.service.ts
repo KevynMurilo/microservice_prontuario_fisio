@@ -20,8 +20,8 @@ export class AnamneseService {
     trx: Prisma.TransactionClient,
     cirurgias: CreateCirurgiaDto[],
     id_anamnese: number,
-  ) {
-    const results = [];
+  ): Promise<CreateCirurgiaDto[]> {
+    const results: CreateCirurgiaDto[] = [];
     for (const cirurgia of cirurgias) {
       if (cirurgia.realizou) {
         const result = await this.anamneseRepository.createCirurgia(
@@ -39,8 +39,8 @@ export class AnamneseService {
     trx: Prisma.TransactionClient,
     doencas: CreateDoencaDto[],
     id_anamnese: number,
-  ) {
-    const results = [];
+  ): Promise<CreateDoencaDto[]> {
+    const results: CreateDoencaDto[] = [];
     for (const doenca of doencas) {
       const result = await this.anamneseRepository.createDoencaConcomitante(
         trx,

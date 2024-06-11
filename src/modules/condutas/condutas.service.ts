@@ -11,8 +11,8 @@ export class CondutasService {
     trx: Prisma.TransactionClient,
     createCondutaDto: CreateCondutaDto[],
     id_prontuario: number,
-  ) {
-    const results = [];
+  ): Promise<CreateCondutaDto[]> {
+    const results: CreateCondutaDto[] = [];
     for (const condutas of createCondutaDto) {
       const result = await this.condutasRepository.create(
         trx,

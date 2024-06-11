@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ObjetivoRepository } from './objetivo.repository';
 import { CreateObjetivoDto } from './dto/create-objetivo.dto';
-import { Prisma } from '@prisma/client';
+import { Objetivo, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ObjetivoService {
@@ -11,7 +11,7 @@ export class ObjetivoService {
     trx: Prisma.TransactionClient,
     createObjetivoDto: CreateObjetivoDto[],
     id_prontuario: number,
-  ) {
+  ): Promise<Objetivo[]> {
     const results = [];
     for (const objetivo of createObjetivoDto) {
       const result = await this.objetivoRepository.create(
