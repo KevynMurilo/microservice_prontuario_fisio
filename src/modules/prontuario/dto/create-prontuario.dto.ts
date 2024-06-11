@@ -82,7 +82,7 @@ export class CreateProntuarioDto {
   @IsNotEmpty({ message: 'Peso é obrigatório' })
   peso: number;
 
-  @ApiProperty({ example: 170, description: 'Altura do paciente' })
+  @ApiProperty({ example: 1.7, description: 'Altura do paciente' })
   @IsNotEmpty({ message: 'Altura é obrigatório' })
   altura: number;
 

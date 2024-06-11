@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ExamesFisicosRepository } from './exames-fisicos.repository';
 import { CreateExamesFisicosDto } from './dto/create-exames-fisicos.dto';
-import { Prisma } from '@prisma/client';
+import { Exame_Fisico, Prisma } from '@prisma/client';
 import { CreateForcaMuscularDto } from './dto/create-forca-muscular.dto';
 import { CreateAdmDto } from './dto/create-adm.dto';
 import { CreateComplementoDto } from './dto/create-complemento.dto';
@@ -15,7 +15,7 @@ export class ExamesFisicosService {
   private async createExamesFisicos(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
-  ) {
+  ): Promise<Exame_Fisico> {
     return await this.examesFisicosRepository.createExamesFisicos(
       trx,
       createExamesFisicosDto,
@@ -26,7 +26,7 @@ export class ExamesFisicosService {
     trx: Prisma.TransactionClient,
     createForcaMuscularDto: CreateForcaMuscularDto[],
     id_exames_fisicos: number,
-  ) {
+  ): Promise<CreateForcaMuscularDto[]> {
     const results = [];
     for (const forcaMuscular of createForcaMuscularDto) {
       if (forcaMuscular) {
@@ -45,7 +45,7 @@ export class ExamesFisicosService {
     trx: Prisma.TransactionClient,
     createAdmDto: CreateAdmDto[],
     id_exames_fisicos: number,
-  ) {
+  ): Promise<CreateAdmDto[]> {
     const results = [];
     for (const adm of createAdmDto) {
       if (adm) {
@@ -63,7 +63,7 @@ export class ExamesFisicosService {
   private async createComplemento(
     trx: Prisma.TransactionClient,
     createComplementoDto: CreateComplementoDto,
-  ) {
+  ): Promise<CreateComplementoDto> {
     return this.examesFisicosRepository.createComplemento(
       trx,
       createComplementoDto,
@@ -73,7 +73,7 @@ export class ExamesFisicosService {
   async create(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
-  ) {
+  ): Promise<any> {
     const examesFisicos = await this.createExamesFisicos(
       trx,
       createExamesFisicosDto,

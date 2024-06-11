@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ProntuarioService } from './prontuario.service';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProntuarioSwaggerDto } from './dto/prontuario-swagger.dto';
@@ -57,6 +57,21 @@ export class ProntuarioController {
   })
   async getByPaciente(@Param('id') id: number) {
     const prontuario = await this.prontuarioService.findByPaciente(+id);
+    return prontuario;
+  }
+
+  @Delete('/paciente/delete/:id')
+  @ApiOperation({ summary: 'Deletar prontuário de um paciente especifico' })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna a mensagem de sucesso',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Prontuário não encontrado',
+  })
+  async delete(@Param('id') id_paciente: number) {
+    const prontuario = await this.prontuarioService.delete(+id_paciente);
     return prontuario;
   }
 }

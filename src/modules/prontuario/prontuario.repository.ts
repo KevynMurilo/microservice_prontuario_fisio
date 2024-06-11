@@ -8,7 +8,7 @@ export class ProntuarioRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getByPaciente(id: number) {
-    return await this.prisma.prontuario.findFirst({
+    return await this.prisma.prontuario.findUnique({
       where: {
         id_paciente: id,
         deleted_at: null,
@@ -177,6 +177,9 @@ export class ProntuarioRepository {
 
   async findAll() {
     return await this.prisma.prontuario.findMany({
+      where: {
+        deleted_at: null,
+      },
       select: {
         id_prontuario: true,
         id_paciente: true,
@@ -287,5 +290,17 @@ export class ProntuarioRepository {
         },
       },
     });
+  }
+
+  async delete(id_paciente: number) {
+    const prontuario = await this.prisma.prontuario.update({
+      where: {
+        id_paciente: id_paciente,
+      },
+      data: {
+        deleted_at: new Date(),
+      },
+    });
+    return prontuario;
   }
 }

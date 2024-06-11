@@ -15,6 +15,7 @@ import { ObjetivoService } from '../objetivo/objetivo.service';
 import { CreateObjetivoDto } from '../objetivo/dto/create-objetivo.dto';
 import { CondutasService } from '../condutas/condutas.service';
 import { CreateCondutaDto } from '../condutas/dto/create-conduta.dto';
+import { AgendamentosService } from '../agendamentos/agendamentos.service';
 
 @Injectable()
 export class ProntuarioService {
@@ -25,6 +26,7 @@ export class ProntuarioService {
     private readonly examesFisicosService: ExamesFisicosService,
     private readonly objetivosService: ObjetivoService,
     private readonly condutasService: CondutasService,
+    private readonly agendamentoService: AgendamentosService,
   ) {}
 
   private async createProntuario(
@@ -46,6 +48,17 @@ export class ProntuarioService {
     );
     if (verify)
       throw new BadRequestException('Paciente já possui um prontuário');
+
+    const lastAppointment =
+      await this.agendamentoService.getAgendamentoPaciente(
+        createProntuarioDto.id_paciente,
+      );
+
+    if (!lastAppointment.primeira_consulta) {
+      throw new BadRequestException(
+        'Paciente só pode ter prontuario na primeira consulta',
+      );
+    }
 
     return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
       const prontuario = await this.createProntuario(trx, createProntuarioDto);
@@ -88,5 +101,17 @@ export class ProntuarioService {
     if (!prontuario) throw new NotFoundException('Prontuário não encontrado');
 
     return prontuario;
+  }
+
+  async delete(
+    id_paciente: number,
+  ): Promise<NotFoundException | { message: string }> {
+    const prontuarioExists =
+      await this.prontuarioRepository.getByPaciente(id_paciente);
+    if (!prontuarioExists)
+      throw new NotFoundException('Prontuário não encontrado');
+
+    await this.prontuarioRepository.delete(id_paciente);
+    return { message: 'Prontuario deletado com sucesso' };
   }
 }

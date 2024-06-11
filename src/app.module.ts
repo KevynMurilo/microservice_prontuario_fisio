@@ -7,6 +7,8 @@ import { ObjetivoModule } from './modules/objetivo/objetivo.module';
 import { CondutasModule } from './modules/condutas/condutas.module';
 import { RelatoriosModule } from './modules/relatorios/relatorios.module';
 import { FichaEvolucaoModule } from './modules/ficha_evolucao/ficha_evolucao.module';
+import { HttpModule } from './common/http/http.module';
+import { AgendamentosModule } from './modules/agendamentos/agendamentos.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { FichaEvolucaoModule } from './modules/ficha_evolucao/ficha_evolucao.mod
     CondutasModule,
     RelatoriosModule,
     FichaEvolucaoModule,
+    HttpModule,
+    AgendamentosModule,
   ],
   controllers: [],
   providers: [],
