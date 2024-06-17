@@ -21,10 +21,7 @@ export class CreateProntuarioDto {
   @IsNotEmpty({ message: 'Id do paciente é obrigatório' })
   id_paciente: number;
 
-  @ApiProperty({ example: 2, description: 'ID do fisioterapeuta' })
-  @IsInt({ message: 'Id do fisioterapeuta deve ser um número inteiro' })
-  @IsNotEmpty({ message: 'Id do fisioterapeuta é obrigatório' })
-  id_fisioterapeuta: number;
+  id_fisioterapeuta?: number;
 
   @ApiProperty({ example: 3, description: 'ID do coordenador' })
   @IsInt({ message: 'Id do coordenador deve ser um número inteiro' })

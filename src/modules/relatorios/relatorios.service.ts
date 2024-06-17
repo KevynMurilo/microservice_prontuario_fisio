@@ -5,30 +5,38 @@ import {
 } from '@nestjs/common';
 import { CreateRelatorioDto } from './dto/create-relatorio.dto';
 import { RelatoriosRepository } from './relatorios.repository';
-import { AgendamentosService } from '../agendamentos/agendamentos.service';
+import { PacienteService } from '../paciente/paciente.service';
+import { Request } from 'express';
 
 @Injectable()
 export class RelatoriosService {
   constructor(
     private readonly relatoriosRepository: RelatoriosRepository,
-    private readonly agendamentoService: AgendamentosService,
+    private readonly pacienteService: PacienteService,
   ) {}
 
   async create(
     createRelatorioDto: CreateRelatorioDto,
+    req: Request,
   ): Promise<CreateRelatorioDto> {
-    const lastAppointment =
-      await this.agendamentoService.getAgendamentoPaciente(
-        createRelatorioDto.id_paciente,
-      );
+    const user = req.user;
+    const id_fisioterapeuta = Number(user.UserId);
 
-    if (!lastAppointment.primeira_consulta) {
-      return await this.relatoriosRepository.create(createRelatorioDto);
-    } else {
+    const paciente = await this.pacienteService.getPacienteId(
+      createRelatorioDto.id_paciente,
+      req.headers.authorization,
+    );
+
+    if (paciente.data.PrimeiraConsulta) {
       throw new BadRequestException(
-        'O paciente só pode criar o relatorio se não for a primeira consulta',
+        'Paciente só pode ter relatorio após a primeira consulta',
       );
     }
+
+    return await this.relatoriosRepository.create({
+      ...createRelatorioDto,
+      id_fisioterapeuta,
+    });
   }
 
   async findMany(): Promise<CreateRelatorioDto[]> {

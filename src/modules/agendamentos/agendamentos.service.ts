@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from 'src/common/http/http.service';
 import { Agendamento } from './interfaces/agendamento.interface';
@@ -12,16 +17,29 @@ export class AgendamentosService {
 
   async getAgendamentoPaciente(id_paciente: number): Promise<Agendamento> {
     const url = `${this.agendamentosUrl}/agendamentos/paciente/${id_paciente}`;
-    const response = await lastValueFrom(
-      this.httpService.get<Agendamento[]>(url),
-    );
-
-    if (!Array.isArray(response.data) || response.data.length === 0) {
-      throw new BadRequestException(
-        'Nenhum agendamento encontrado para o paciente',
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get<Agendamento[]>(url),
       );
-    }
 
-    return response.data[response.data.length - 1];
+      if (
+        !Array.isArray(response.data) ||
+        response.data.length === 0 ||
+        !response
+      ) {
+        throw new BadRequestException(
+          'Nenhum agendamento encontrado para o paciente',
+        );
+      }
+
+      return response.data[response.data.length - 1];
+    } catch (error) {
+      if (error.code === 'ECONNREFUSED') {
+        throw new ServiceUnavailableException(
+          'O serviço de agendamentos está indisponível no momento. Por favor, tente novamente mais tarde.',
+        );
+      }
+      throw error;
+    }
   }
 }

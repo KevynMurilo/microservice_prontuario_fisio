@@ -7,7 +7,7 @@ import { AnamneseModule } from '../anamnese/anamnese.module';
 import { ExamesFisicosModule } from '../exames_fisicos/exames_fisicos.module';
 import { ObjetivoModule } from '../objetivo/objetivo.module';
 import { CondutasModule } from '../condutas/condutas.module';
-import { AgendamentosModule } from '../agendamentos/agendamentos.module';
+import { PacienteModule } from '../paciente/paciente.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { AgendamentosModule } from '../agendamentos/agendamentos.module';
     ExamesFisicosModule,
     ObjetivoModule,
     CondutasModule,
-    AgendamentosModule,
+    PacienteModule,
   ],
   controllers: [ProntuarioController],
   providers: [ProntuarioService, ProntuarioRepository, PrismaService],
