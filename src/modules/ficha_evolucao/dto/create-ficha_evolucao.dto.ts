@@ -11,13 +11,6 @@ export class CreateFichaEvolucaoDto {
   @IsNotEmpty({ message: 'O id_paciente não pode estar vazio.' })
   id_paciente: number;
 
-  @ApiProperty({
-    description: 'ID do fisioterapeuta',
-    example: 2,
-    type: Number,
-  })
-  @IsInt({ message: 'O id_fisioterapeuta deve ser um número inteiro.' })
-  @IsNotEmpty({ message: 'O id_fisioterapeuta não pode estar vazio.' })
   id_fisioterapeuta: number;
 
   @ApiProperty({

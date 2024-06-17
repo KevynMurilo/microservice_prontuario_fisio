@@ -6,10 +6,12 @@ import {
   Param,
   Delete,
   NotFoundException,
+  Req,
 } from '@nestjs/common';
 import { FichaEvolucaoService } from './ficha_evolucao.service';
 import { CreateFichaEvolucaoDto } from './dto/create-ficha_evolucao.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @ApiTags('ficha-evolucao')
 @Controller('fichaEvolucao')
@@ -19,8 +21,9 @@ export class FichaEvolucaoController {
   @Post()
   create(
     @Body() createFichaEvolucaoDto: CreateFichaEvolucaoDto,
+    @Req() req: Request,
   ): Promise<CreateFichaEvolucaoDto> {
-    return this.fichaEvolucaoService.create(createFichaEvolucaoDto);
+    return this.fichaEvolucaoService.create(createFichaEvolucaoDto, req);
   }
 
   @Get()

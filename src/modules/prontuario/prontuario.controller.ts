@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { ProntuarioService } from './prontuario.service';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProntuarioSwaggerDto } from './dto/prontuario-swagger.dto';
+import { Request } from 'express';
 
 @ApiTags('Prontuario')
 @Controller('prontuario')
@@ -19,15 +28,15 @@ export class ProntuarioController {
     description: 'Paciente já possui um prontuário',
   })
   @ApiBody({ type: ProntuarioSwaggerDto })
-  async create(@Body() data: any) {
-    const prontuario = await this.prontuarioService.createFull(
+  async create(@Body() data: any, @Req() req: Request) {
+    return await this.prontuarioService.createFull(
       data.prontuario,
       data.anamnese,
       data.examesFisicos,
       data.objetivos,
       data.condutas,
+      req,
     );
-    return prontuario;
   }
 
   @Get()

@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 export class HttpService {
   constructor(private readonly httpService: AxiosHttpService) {}
 
-  get<T>(url: string, params?: any): Observable<AxiosResponse<T>> {
-    return this.httpService.get<T>(url, { params });
+  get<T>(url: string, config?: any): Observable<AxiosResponse<T>> {
+    return this.httpService.get<T>(url, config);
   }
 
   post<T>(url: string, data: any): Observable<AxiosResponse<T>> {

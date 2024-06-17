@@ -1,20 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFichaEvolucaoDto } from './dto/create-ficha_evolucao.dto';
 import { FichaEvolucaoRepository } from './ficha-evolucao.repository';
+import { Request } from 'express';
+import { PacienteService } from '../paciente/paciente.service';
 
 @Injectable()
 export class FichaEvolucaoService {
   constructor(
     private readonly fichaEvolucaoRepository: FichaEvolucaoRepository,
+    private readonly pacienteService: PacienteService,
   ) {}
 
   async create(
     createFichaEvolucaoDto: CreateFichaEvolucaoDto,
+    req: Request,
   ): Promise<CreateFichaEvolucaoDto> {
-    const fichaEvolucao = await this.fichaEvolucaoRepository.create(
-      createFichaEvolucaoDto,
+    const user = req.user;
+    const id_fisioterapeuta = Number(user.UserId);
+
+    await this.pacienteService.getPacienteId(
+      createFichaEvolucaoDto.id_paciente,
+      req.headers.authorization,
     );
-    return fichaEvolucao;
+
+    return await this.fichaEvolucaoRepository.create({
+      ...createFichaEvolucaoDto,
+      id_fisioterapeuta: id_fisioterapeuta,
+    });
   }
 
   async findMany(): Promise<CreateFichaEvolucaoDto[]> {

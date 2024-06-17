@@ -15,7 +15,8 @@ import { ObjetivoService } from '../objetivo/objetivo.service';
 import { CreateObjetivoDto } from '../objetivo/dto/create-objetivo.dto';
 import { CondutasService } from '../condutas/condutas.service';
 import { CreateCondutaDto } from '../condutas/dto/create-conduta.dto';
-import { AgendamentosService } from '../agendamentos/agendamentos.service';
+import { Request } from 'express';
+import { PacienteService } from '../paciente/paciente.service';
 
 @Injectable()
 export class ProntuarioService {
@@ -26,7 +27,7 @@ export class ProntuarioService {
     private readonly examesFisicosService: ExamesFisicosService,
     private readonly objetivosService: ObjetivoService,
     private readonly condutasService: CondutasService,
-    private readonly agendamentoService: AgendamentosService,
+    private readonly pacienteService: PacienteService,
   ) {}
 
   private async createProntuario(
@@ -42,26 +43,27 @@ export class ProntuarioService {
     createExamesFisicosDto: CreateExamesFisicosDto,
     createObjetivoDto: CreateObjetivoDto[],
     createCondutaDto: CreateCondutaDto[],
+    req: Request,
   ) {
+    const user = req.user;
+    const id_fisioterapeuta = Number(user.UserId);
+
+    await this.pacienteService.getPacienteId(
+      createProntuarioDto.id_paciente,
+      req.headers.authorization,
+    );
+
     const verify = await this.prontuarioRepository.getByPaciente(
       createProntuarioDto.id_paciente,
     );
     if (verify)
       throw new BadRequestException('Paciente já possui um prontuário');
 
-    const lastAppointment =
-      await this.agendamentoService.getAgendamentoPaciente(
-        createProntuarioDto.id_paciente,
-      );
-
-    if (!lastAppointment.primeira_consulta) {
-      throw new BadRequestException(
-        'Paciente só pode ter prontuario na primeira consulta',
-      );
-    }
-
     return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
-      const prontuario = await this.createProntuario(trx, createProntuarioDto);
+      const prontuario = await this.createProntuario(trx, {
+        ...createProntuarioDto,
+        id_fisioterapeuta: id_fisioterapeuta,
+      });
 
       const anamnese = await this.anamneseService.createFull(
         trx,
