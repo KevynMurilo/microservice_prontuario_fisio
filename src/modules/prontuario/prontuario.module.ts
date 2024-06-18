@@ -8,6 +8,7 @@ import { ExamesFisicosModule } from '../exames_fisicos/exames_fisicos.module';
 import { ObjetivoModule } from '../objetivo/objetivo.module';
 import { CondutasModule } from '../condutas/condutas.module';
 import { PacienteModule } from '../paciente/paciente.module';
+import { VerificarIdAgendamentoModule } from 'src/common/utils/verificar-id-agendamento/verificar-id-agendamento.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PacienteModule } from '../paciente/paciente.module';
     ObjetivoModule,
     CondutasModule,
     PacienteModule,
+    VerificarIdAgendamentoModule,
   ],
   controllers: [ProntuarioController],
   providers: [ProntuarioService, ProntuarioRepository, PrismaService],

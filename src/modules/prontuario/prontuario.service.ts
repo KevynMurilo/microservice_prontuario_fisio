@@ -17,6 +17,7 @@ import { CondutasService } from '../condutas/condutas.service';
 import { CreateCondutaDto } from '../condutas/dto/create-conduta.dto';
 import { Request } from 'express';
 import { PacienteService } from '../paciente/paciente.service';
+import { VerificarIdAgendamentoService } from 'src/common/utils/verificar-id-agendamento/verificar-id-agendamento.service';
 
 @Injectable()
 export class ProntuarioService {
@@ -28,6 +29,7 @@ export class ProntuarioService {
     private readonly objetivosService: ObjetivoService,
     private readonly condutasService: CondutasService,
     private readonly pacienteService: PacienteService,
+    private readonly verificarIdAgendamento: VerificarIdAgendamentoService,
   ) {}
 
   private async createProntuario(
@@ -39,12 +41,6 @@ export class ProntuarioService {
     );
     if (verify)
       throw new BadRequestException('Paciente já possui um prontuário');
-
-    const verifyAgendamento = await this.prontuarioRepository.getByAgendamento(
-      createProntuarioDto.id_agendamento,
-    );
-    if (verifyAgendamento)
-      throw new BadRequestException('Agendamento já vinculado a um prontuário');
 
     return this.prontuarioRepository.createProntuario(trx, createProntuarioDto);
   }
@@ -63,6 +59,10 @@ export class ProntuarioService {
     await this.pacienteService.getPacienteId(
       createProntuarioDto.id_paciente,
       req.headers.authorization,
+    );
+
+    await this.verificarIdAgendamento.verify(
+      createProntuarioDto.id_agendamento,
     );
 
     return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
