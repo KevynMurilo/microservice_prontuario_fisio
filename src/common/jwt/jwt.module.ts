@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from './jwt.service';
 import { JwtModule as JwtModuleBib } from '@nestjs/jwt';
-import { JwtController } from './jwt.controller';
 
 @Module({
   imports: [
@@ -13,6 +12,5 @@ import { JwtController } from './jwt.controller';
   ],
   providers: [JwtService],
   exports: [JwtService],
-  controllers: [JwtController],
 })
 export class JwtModule {}

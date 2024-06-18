@@ -7,8 +7,6 @@ import { ObjetivoModule } from './modules/objetivo/objetivo.module';
 import { CondutasModule } from './modules/condutas/condutas.module';
 import { RelatoriosModule } from './modules/relatorios/relatorios.module';
 import { FichaEvolucaoModule } from './modules/ficha_evolucao/ficha_evolucao.module';
-import { HttpModule } from './common/http/http.module';
-import { AgendamentosModule } from './modules/agendamentos/agendamentos.module';
 import { PacienteModule } from './modules/paciente/paciente.module';
 import { JwtModule } from './common/jwt/jwt.module';
 import { RoleMiddleware } from './middlewares/role.middleware';
@@ -23,8 +21,6 @@ import { RoleMiddleware } from './middlewares/role.middleware';
     CondutasModule,
     RelatoriosModule,
     FichaEvolucaoModule,
-    HttpModule,
-    AgendamentosModule,
     PacienteModule,
     JwtModule,
   ],

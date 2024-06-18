@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateFichaEvolucaoDto } from './dto/create-ficha_evolucao.dto';
 import { FichaEvolucaoRepository } from './ficha-evolucao.repository';
 import { Request } from 'express';
@@ -18,10 +22,16 @@ export class FichaEvolucaoService {
     const user = req.user;
     const id_fisioterapeuta = Number(user.UserId);
 
-    await this.pacienteService.getPacienteId(
+    const paciente = await this.pacienteService.getPacienteId(
       createFichaEvolucaoDto.id_paciente,
       req.headers.authorization,
     );
+
+    if (paciente.data.primeiraConsulta) {
+      throw new BadRequestException(
+        'Paciente só pode ter ficha de evolução após a primeira consulta',
+      );
+    }
 
     return await this.fichaEvolucaoRepository.create({
       ...createFichaEvolucaoDto,

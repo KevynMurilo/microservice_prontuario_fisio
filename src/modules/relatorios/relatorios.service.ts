@@ -27,7 +27,7 @@ export class RelatoriosService {
       req.headers.authorization,
     );
 
-    if (paciente.data.PrimeiraConsulta) {
+    if (paciente.data.primeiraConsulta) {
       throw new BadRequestException(
         'Paciente só pode ter relatorio após a primeira consulta',
       );

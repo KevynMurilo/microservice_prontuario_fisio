@@ -8,11 +8,18 @@ import {
   Req,
 } from '@nestjs/common';
 import { ProntuarioService } from './prontuario.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ProntuarioSwaggerDto } from './dto/prontuario-swagger.dto';
 import { Request } from 'express';
 
 @ApiTags('Prontuario')
+@ApiBearerAuth('access-token')
 @Controller('prontuario')
 export class ProntuarioController {
   constructor(private readonly prontuarioService: ProntuarioService) {}
@@ -26,6 +33,14 @@ export class ProntuarioController {
   @ApiResponse({
     status: 400,
     description: 'Paciente já possui um prontuário',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado ou inválido',
+  })
+  @ApiResponse({
+    status: 404,
+    description: '"Paciente não encontrado"',
   })
   @ApiBody({ type: ProntuarioSwaggerDto })
   async create(@Body() data: any, @Req() req: Request) {
@@ -46,6 +61,10 @@ export class ProntuarioController {
     description: 'Retorna o json dos prontuários criados',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado ou inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Nenhum prontuário encontrado',
   })
@@ -61,6 +80,10 @@ export class ProntuarioController {
     description: 'Retorna o json do prontuário do paciente',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado ou inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Prontuário não encontrado',
   })
@@ -74,6 +97,10 @@ export class ProntuarioController {
   @ApiResponse({
     status: 200,
     description: 'Retorna a mensagem de sucesso',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado ou inválido',
   })
   @ApiResponse({
     status: 404,
