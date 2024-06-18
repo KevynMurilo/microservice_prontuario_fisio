@@ -42,6 +42,10 @@ export class ProntuarioController {
     status: 404,
     description: '"Paciente não encontrado"',
   })
+  @ApiResponse({
+    status: 409,
+    description: '"Id do agendamento já está em uso"',
+  })
   @ApiBody({ type: ProntuarioSwaggerDto })
   async create(@Body() data: any, @Req() req: Request) {
     return await this.prontuarioService.createFull(
