@@ -4,10 +4,13 @@ CREATE TYPE "StatusTonus" AS ENUM ('NORMAL', 'ALTERADO');
 -- CreateTable
 CREATE TABLE "relatorios" (
     "id_relatorio" SERIAL NOT NULL,
+    "id_agendamento" INTEGER NOT NULL,
     "id_paciente" INTEGER NOT NULL,
     "id_fisioterapeuta" INTEGER NOT NULL,
     "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "descricao" TEXT NOT NULL,
+    "created_At" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "relatorios_pkey" PRIMARY KEY ("id_relatorio")
 );
@@ -15,10 +18,13 @@ CREATE TABLE "relatorios" (
 -- CreateTable
 CREATE TABLE "ficha_de_evolução" (
     "id_ficha_evolucao" SERIAL NOT NULL,
+    "id_agendamento" INTEGER NOT NULL,
     "id_paciente" INTEGER NOT NULL,
     "id_fisioterapeuta" INTEGER NOT NULL,
     "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "descricao" TEXT NOT NULL,
+    "created_At" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "ficha_de_evolução_pkey" PRIMARY KEY ("id_ficha_evolucao")
 );
@@ -26,9 +32,9 @@ CREATE TABLE "ficha_de_evolução" (
 -- CreateTable
 CREATE TABLE "prontuarios" (
     "id_prontuario" SERIAL NOT NULL,
+    "id_agendamento" INTEGER NOT NULL,
     "id_paciente" INTEGER NOT NULL,
     "id_fisioterapeuta" INTEGER NOT NULL,
-    "id_coordenador" INTEGER NOT NULL,
     "unidade" TEXT NOT NULL,
     "setor_atendimento" TEXT NOT NULL,
     "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -57,8 +63,6 @@ CREATE TABLE "anamnese" (
     "hma" TEXT NOT NULL,
     "hmp" TEXT NOT NULL,
     "avd" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "anamnese_pkey" PRIMARY KEY ("id_anamnese")
 );
@@ -70,8 +74,6 @@ CREATE TABLE "cirurgias" (
     "realizou" BOOLEAN NOT NULL,
     "quais" TEXT,
     "resultados_exames" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "cirurgias_pkey" PRIMARY KEY ("id_cirurgia")
 );
@@ -83,8 +85,6 @@ CREATE TABLE "doencas_concomitantes" (
     "dm" BOOLEAN NOT NULL,
     "has" BOOLEAN NOT NULL,
     "outros" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "doencas_concomitantes_pkey" PRIMARY KEY ("id_doencas_concomitantes")
 );
@@ -121,8 +121,6 @@ CREATE TABLE "exames_fisicos" (
     "inspecao" TEXT,
     "palpacao" TEXT,
     "mensuracao" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "exames_fisicos_pkey" PRIMARY KEY ("id_exames_fisicos")
 );
@@ -134,8 +132,6 @@ CREATE TABLE "forca_muscular" (
     "musculo" TEXT,
     "grupo" TEXT,
     "grau" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "forca_muscular_pkey" PRIMARY KEY ("id_forca_muscular")
 );
@@ -147,8 +143,6 @@ CREATE TABLE "adm" (
     "movimento" TEXT,
     "ativa" TEXT,
     "passiva" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "adm_pkey" PRIMARY KEY ("id_adm")
 );
@@ -165,8 +159,6 @@ CREATE TABLE "complementos" (
     "avaliacao_funcional" TEXT NOT NULL,
     "observacoes" TEXT,
     "exames_complementares_ou_laudos" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "complementos_pkey" PRIMARY KEY ("id_complementos")
 );
@@ -176,8 +168,6 @@ CREATE TABLE "objetivos" (
     "id_objetivo" SERIAL NOT NULL,
     "id_prontuario" INTEGER NOT NULL,
     "descricao_objetivo_fisioterapeutico" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "objetivos_pkey" PRIMARY KEY ("id_objetivo")
 );
@@ -187,11 +177,21 @@ CREATE TABLE "condutas" (
     "id_conduta" SERIAL NOT NULL,
     "id_prontuario" INTEGER NOT NULL,
     "descricao_conduta_fisioterapeutica" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "condutas_pkey" PRIMARY KEY ("id_conduta")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "relatorios_id_agendamento_key" ON "relatorios"("id_agendamento");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ficha_de_evolução_id_agendamento_key" ON "ficha_de_evolução"("id_agendamento");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "prontuarios_id_agendamento_key" ON "prontuarios"("id_agendamento");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "prontuarios_id_paciente_key" ON "prontuarios"("id_paciente");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "anamnese_id_anamnese_key" ON "anamnese"("id_anamnese");

@@ -9,6 +9,7 @@ datasource db {
 
 model Relatorio {
   id_relatorio Int @id @default(autoincrement())
+  id_agendamento Int @unique
   id_paciente Int
   id_fisioterapeuta Int
   data DateTime @default(now())
@@ -21,6 +22,7 @@ model Relatorio {
 
 model FichaEvolucao {
   id_ficha_evolucao Int @id @default(autoincrement())
+  id_agendamento Int @unique
   id_paciente Int
   id_fisioterapeuta Int
   data DateTime @default(now())
@@ -33,9 +35,9 @@ model FichaEvolucao {
 
 model Prontuario {
   id_prontuario              Int           @id @default(autoincrement())
+  id_agendamento Int @unique
   id_paciente                Int           @unique
   id_fisioterapeuta          Int
-  id_coordenador             Int
   unidade                    String
   setor_atendimento          String
   data                       DateTime      @default(now())

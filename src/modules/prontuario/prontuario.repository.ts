@@ -7,6 +7,15 @@ import { CreateProntuarioDto } from './dto/create-prontuario.dto';
 export class ProntuarioRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getByAgendamento(id: number) {
+    return await this.prisma.prontuario.findUnique({
+      where: {
+        id_agendamento: id,
+        deleted_at: null,
+      },
+    });
+  }
+
   async getByPaciente(id: number) {
     return await this.prisma.prontuario.findUnique({
       where: {
@@ -15,9 +24,9 @@ export class ProntuarioRepository {
       },
       select: {
         id_prontuario: true,
+        id_agendamento: true,
         id_paciente: true,
         id_fisioterapeuta: true,
-        id_coordenador: true,
         unidade: true,
         setor_atendimento: true,
         data: true,
@@ -131,9 +140,9 @@ export class ProntuarioRepository {
   ) {
     return trx.prontuario.create({
       data: {
+        id_agendamento: createProntuarioDto.id_agendamento,
         id_paciente: createProntuarioDto.id_paciente,
         id_fisioterapeuta: createProntuarioDto.id_fisioterapeuta,
-        id_coordenador: createProntuarioDto.id_coordenador,
         unidade: createProntuarioDto.unidade,
         setor_atendimento: createProntuarioDto.setor_atendimento,
         responsavel: createProntuarioDto.responsavel,
@@ -153,9 +162,9 @@ export class ProntuarioRepository {
       },
       select: {
         id_prontuario: true,
+        id_agendamento: true,
         id_paciente: true,
         id_fisioterapeuta: true,
-        id_coordenador: true,
         unidade: true,
         setor_atendimento: true,
         data: true,
@@ -182,9 +191,9 @@ export class ProntuarioRepository {
       },
       select: {
         id_prontuario: true,
+        id_agendamento: true,
         id_paciente: true,
         id_fisioterapeuta: true,
-        id_coordenador: true,
         unidade: true,
         setor_atendimento: true,
         data: true,

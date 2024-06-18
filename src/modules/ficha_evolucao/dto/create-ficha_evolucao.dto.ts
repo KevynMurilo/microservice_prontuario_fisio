@@ -2,6 +2,11 @@ import { IsInt, IsString, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateFichaEvolucaoDto {
+  @ApiProperty({ example: 3, description: 'ID do agendamento' })
+  @IsInt({ message: 'Id do agendamento deve ser um número inteiro' })
+  @IsNotEmpty({ message: 'Id do agendamento é obrigatório' })
+  id_agendamento: number;
+
   @ApiProperty({
     description: 'ID do paciente',
     example: 1,

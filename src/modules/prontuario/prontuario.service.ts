@@ -34,6 +34,18 @@ export class ProntuarioService {
     trx: Prisma.TransactionClient,
     createProntuarioDto: CreateProntuarioDto,
   ) {
+    const verify = await this.prontuarioRepository.getByPaciente(
+      createProntuarioDto.id_paciente,
+    );
+    if (verify)
+      throw new BadRequestException('Paciente já possui um prontuário');
+
+    const verifyAgendamento = await this.prontuarioRepository.getByAgendamento(
+      createProntuarioDto.id_agendamento,
+    );
+    if (verifyAgendamento)
+      throw new BadRequestException('Agendamento já vinculado a um prontuário');
+
     return this.prontuarioRepository.createProntuario(trx, createProntuarioDto);
   }
 
@@ -52,12 +64,6 @@ export class ProntuarioService {
       createProntuarioDto.id_paciente,
       req.headers.authorization,
     );
-
-    const verify = await this.prontuarioRepository.getByPaciente(
-      createProntuarioDto.id_paciente,
-    );
-    if (verify)
-      throw new BadRequestException('Paciente já possui um prontuário');
 
     return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
       const prontuario = await this.createProntuario(trx, {

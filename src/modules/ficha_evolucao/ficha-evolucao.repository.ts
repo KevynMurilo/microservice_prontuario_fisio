@@ -18,6 +18,7 @@ export class FichaEvolucaoRepository {
   async create(createFichaEvolucaoDto: CreateFichaEvolucaoDto) {
     return await this.prisma.fichaEvolucao.create({
       data: {
+        id_agendamento: createFichaEvolucaoDto.id_agendamento,
         id_paciente: createFichaEvolucaoDto.id_paciente,
         id_fisioterapeuta: createFichaEvolucaoDto.id_fisioterapeuta,
         descricao: createFichaEvolucaoDto.descricao,
