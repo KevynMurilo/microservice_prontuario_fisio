@@ -43,6 +43,10 @@ export class FichaEvolucaoController {
     status: 404,
     description: '"Paciente não encontrado"',
   })
+  @ApiResponse({
+    status: 409,
+    description: '"Id do agendamento já está em uso"',
+  })
   create(
     @Body() createFichaEvolucaoDto: CreateFichaEvolucaoDto,
     @Req() req: Request,

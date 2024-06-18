@@ -46,6 +46,10 @@ export class RelatoriosController {
     status: 404,
     description: '"Paciente não encontrado"',
   })
+  @ApiResponse({
+    status: 409,
+    description: '"Id do agendamento já está em uso"',
+  })
   create(
     @Body() createRelatorioDto: CreateRelatorioDto,
     @Req() req: Request,
