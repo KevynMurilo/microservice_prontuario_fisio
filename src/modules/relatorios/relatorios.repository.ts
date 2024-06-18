@@ -18,6 +18,7 @@ export class RelatoriosRepository {
   async create(createRelatorioDto: CreateRelatorioDto) {
     return await this.prisma.relatorio.create({
       data: {
+        id_agendamento: createRelatorioDto.id_agendamento,
         id_paciente: createRelatorioDto.id_paciente,
         id_fisioterapeuta: createRelatorioDto.id_fisioterapeuta,
         descricao: createRelatorioDto.descricao,
