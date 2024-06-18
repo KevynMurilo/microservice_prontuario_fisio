@@ -7,12 +7,14 @@ import { CreateFichaEvolucaoDto } from './dto/create-ficha_evolucao.dto';
 import { FichaEvolucaoRepository } from './ficha-evolucao.repository';
 import { Request } from 'express';
 import { PacienteService } from '../paciente/paciente.service';
+import { VerificarIdAgendamentoService } from 'src/common/utils/verificar-id-agendamento/verificar-id-agendamento.service';
 
 @Injectable()
 export class FichaEvolucaoService {
   constructor(
     private readonly fichaEvolucaoRepository: FichaEvolucaoRepository,
     private readonly pacienteService: PacienteService,
+    private readonly verificarIdAgendamento: VerificarIdAgendamentoService,
   ) {}
 
   async create(
@@ -32,6 +34,10 @@ export class FichaEvolucaoService {
         'Paciente só pode ter ficha de evolução após a primeira consulta',
       );
     }
+
+    await this.verificarIdAgendamento.verify(
+      createFichaEvolucaoDto.id_agendamento,
+    );
 
     return await this.fichaEvolucaoRepository.create({
       ...createFichaEvolucaoDto,

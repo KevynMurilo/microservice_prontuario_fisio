@@ -7,12 +7,14 @@ import { CreateRelatorioDto } from './dto/create-relatorio.dto';
 import { RelatoriosRepository } from './relatorios.repository';
 import { PacienteService } from '../paciente/paciente.service';
 import { Request } from 'express';
+import { VerificarIdAgendamentoService } from 'src/common/utils/verificar-id-agendamento/verificar-id-agendamento.service';
 
 @Injectable()
 export class RelatoriosService {
   constructor(
     private readonly relatoriosRepository: RelatoriosRepository,
     private readonly pacienteService: PacienteService,
+    private readonly verificarIdAgendamento: VerificarIdAgendamentoService,
   ) {}
 
   async create(
@@ -32,6 +34,8 @@ export class RelatoriosService {
         'Paciente só pode ter relatorio após a primeira consulta',
       );
     }
+
+    await this.verificarIdAgendamento.verify(createRelatorioDto.id_agendamento);
 
     return await this.relatoriosRepository.create({
       ...createRelatorioDto,

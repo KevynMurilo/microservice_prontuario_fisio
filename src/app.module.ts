@@ -10,6 +10,7 @@ import { FichaEvolucaoModule } from './modules/ficha_evolucao/ficha_evolucao.mod
 import { PacienteModule } from './modules/paciente/paciente.module';
 import { JwtModule } from './common/jwt/jwt.module';
 import { RoleMiddleware } from './middlewares/role.middleware';
+import { VerificarIdAgendamentoModule } from './common/utils/verificar-id-agendamento/verificar-id-agendamento.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RoleMiddleware } from './middlewares/role.middleware';
     FichaEvolucaoModule,
     PacienteModule,
     JwtModule,
+    VerificarIdAgendamentoModule,
   ],
   controllers: [],
   providers: [],
