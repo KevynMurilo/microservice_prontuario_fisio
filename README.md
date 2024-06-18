@@ -9,6 +9,22 @@
 ## Resumo
 O código fornecido implementa um módulo abrangente de gerenciamento de prontuários fisioterapêuticos em uma aplicação NestJS. A API lida com a gestão de prontuários de pacientes e integra vários submódulos, como Anamnese, Exames Físicos, Objetivo e Condutas. Além disso, oferece funcionalidades para gerenciamento de relatórios e fichas de evolução dos pacientes.
 
+## Acesso ao Swagger
+Para interagir com a API de forma documentada e testar os endpoints disponíveis, utilizamos o Swagger. Para acessar o Swagger UI, siga os passos abaixo:
+
+1. Certifique-se de que a aplicação está em execução localmente. Você pode iniciar a aplicação com o seguinte comando:
+
+```bash
+  yarn start:dev
+```
+2. Abra um navegador web e navegue até o seguinte endereço:
+ ```bash
+   http://localhost:3000/api
+ ```
+Isso abrirá o Swagger UI, onde você poderá visualizar todos os endpoints disponíveis, seus detalhes, e realizar testes diretamente na interface.
+
+> Observação: As rotas que requerem autenticação devem incluir um token de autorização Bearer válido nos cabeçalhos das requisições para serem acessadas corretamente.
+
 ## Tecnologias Utilizadas
 
 Aqui estão as principais tecnologias e suas versões utilizadas no projeto:
@@ -41,13 +57,13 @@ Aqui estão as principais tecnologias e suas versões utilizadas no projeto:
 ## Instalação
 
 ```bash
-$ yarn install
+yarn install
 ```
 
 ### Execução do Prisma
 
 ```
-$ npx prisma migrate dev
+npx prisma migrate dev
 ```
 
 > Execute esse comando para rodar as migrations
@@ -57,19 +73,19 @@ $ npx prisma migrate dev
 Modo de Inicialização
 
 ```bash
-$ yarn start
+yarn start
 ```
 
 Modo de Observação
 
 ```bash
-$ yarn start:dev
+yarn start:dev
 ```
 
 Modo de Produção
 
 ```bash
-$ yarn start:prod
+yarn start:prod
 ```
 
 ## Configuração do Ambiente
@@ -119,8 +135,8 @@ http://localhost:3000/prontuario/paciente/:id
   "prontuario": {
     "unidade": "Unidade X",
     "setor_atendimento": "Setor Y",
+    "id_agendamento": 3,
     "id_paciente": 321,
-    "id_coordenador": 3,
     "responsavel": "Responsável X",
     "caso_emergencia_avisar": "Contato Y",
     "telefone_emergencia": "123456789",
@@ -257,6 +273,7 @@ http://localhost:3000/relatorios/paciente/:id
 
 ```json
 {
+  "id_agendamento": 3,
   "id_paciente": 1,
   "descricao": "Descrição detalhada do relatório do paciente."
 }
@@ -296,6 +313,7 @@ http://localhost:3000/fichaEvolucao/paciente/:id
 
 ```json
 {
+  "id_agendamento": 3,
   "id_paciente": 1,
   "descricao": "Descrição detalhada da evolução do paciente."
 }
