@@ -23,7 +23,7 @@ Para interagir com a API de forma documentada e testar os endpoints disponíveis
  ```
 Isso abrirá o Swagger UI, onde você poderá visualizar todos os endpoints disponíveis, seus detalhes, e realizar testes diretamente na interface.
 
-> Observação: As rotas que requerem autenticação devem incluir um token de autorização Bearer válido nos cabeçalhos das requisições para serem acessadas corretamente.
+> **Observação**: As rotas que requerem autenticação devem incluir um token de autorização Bearer válido nos cabeçalhos das requisições para serem acessadas corretamente.
 
 ## Tecnologias Utilizadas
 
@@ -113,16 +113,25 @@ Todas as rotas requerem o envio de um Authorization Bearer Token de fisioterapeu
 ## Endpoints
 
 ### Rota GET para listar todos os prontuários
-
 ```
 http://localhost:3000/prontuario
 ```
+> Retorno com o codigo 200 (Successful): Retorna o json dos prontuários criados
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Nenhum prontuário encontrado
 
 ### Rota GET para listar o prontuario pelo o ID do paciente
 
 ```
 http://localhost:3000/prontuario/paciente/:id
 ```
+> Retorno com o codigo 200 (Successful): Retorna o json do prontuário do paciente
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Prontuário não encontrado
 
 ### Rota POST para prontuário
 
@@ -238,9 +247,13 @@ http://localhost:3000/prontuario/paciente/:id
   ]
 }
 ```
+> Retorno com o codigo 201 (Created): Retorna o json do prontuário criado
 
-### Retorno com o codigo 201 (Created)
-Vai retornar o json confirmando o registro
+> Retorno com o codigo 400 (Bad request): Paciente já possui um prontuário
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Paciente não encontrado
 
 ### Rota DELETE para deletar o prontuario pelo o ID do paciente
 
@@ -248,8 +261,11 @@ Vai retornar o json confirmando o registro
 http://localhost:3000/prontuario/paciente/delete/:id
 ```
 
-### Retorno com o codigo 200 (Successful)
-Vai retornar uma mensagem de sucesso
+> Retorno com o codigo 200 (Successful): Vai retornar uma mensagem de sucesso
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Prontuário não encontrado
 
 ----------------------------------------------------
 
@@ -259,11 +275,24 @@ Vai retornar uma mensagem de sucesso
 http://localhost:3000/relatorios
 ```
 
+> Retorno com o codigo 200 (Successful): Retorna o json dos relatórios criados
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Nenhum relatório encontrado
+
+
 ### Rota GET para listar os relatórios pelo o ID do paciente
 
 ```
 http://localhost:3000/relatorios/paciente/:id
 ```
+
+> Retorno com o codigo 200 (Successful): Retorna o json dos relatório do paciente
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Relatórios não encontrado
 
 ### Rota POST para relatorios
 
@@ -279,8 +308,14 @@ http://localhost:3000/relatorios/paciente/:id
 }
 ```
 
-### Retorno com o codigo 201 (Created)
-Vai retornar o json confirmando o registro
+> Retorno com o codigo 201 (Created): Retorna o json do relatório criado
+
+> Retorno com o codigo 400 (Bad request): Paciente só pode ter relatorio após a primeira consulta
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Paciente não encontrado
+
 
 ### Rota DELETE para deletar pelo Id do relatório
 
@@ -288,8 +323,11 @@ Vai retornar o json confirmando o registro
 http://localhost:3000/relatorios/delete/:id
 ```
 
-### Retorno com o codigo 200 (Successful)
-Vai retornar uma mensagem de sucesso
+> Retorno com o codigo 200 (Successful): Vai retornar uma mensagem de sucesso
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Relatório não encontrad
 
 ----------------------------------------------------
 
@@ -299,11 +337,24 @@ Vai retornar uma mensagem de sucesso
 http://localhost:3000/fichaEvolucao
 ```
 
+> Retorno com o codigo 200 (Successful): 	Retorna o json das ficha de evolução criadas
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Nenhum ficha de evolução encontrada
+
+
 ### Rota GET para listar as fichas de evolução pelo o ID do paciente
 
 ```
 http://localhost:3000/fichaEvolucao/paciente/:id
 ```
+
+> Retorno com o codigo 200 (Successful): Retorna o json das fichas de evolução do paciente
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Ficha de evolução não encontrado
 
 ### Rota POST para ficha de evolução
 
@@ -319,8 +370,13 @@ http://localhost:3000/fichaEvolucao/paciente/:id
 }
 ```
 
-### Retorno com o codigo 201 (Created)
-Vai retornar o json confirmando o registro
+> Retorno com o codigo 201 (Created): Retorna o json da ficha de evolução criada
+
+> Retorno com o codigo 400 (Bad request): Paciente só pode ter ficha de evolução após a primeira consulta
+
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Paciente não encontrado
 
 ### Rota DELETE para deletar pelo Id do relatório
 
@@ -328,9 +384,11 @@ Vai retornar o json confirmando o registro
 http://localhost:3000/fichaEvolucao/delete/:id
 ```
 
-### Retorno com o codigo 200 (Successful)
-Vai retornar uma mensagem de sucesso
+> Retorno com o codigo 200 (Successful): Vai retornar uma mensagem de sucesso
 
+> Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
+
+> Retorno com o codigo 404 (Not found): Ficha de evolução não encontrada
 
 ### Notas Adicionais:
 
