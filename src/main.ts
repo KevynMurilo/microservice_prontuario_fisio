@@ -11,13 +11,31 @@ async function bootstrap() {
     .setDescription(
       'Desenvolvimento de uma API para Gestão de Informações de Prontuários Fisioterapêuticos',
     )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: `
+    Para testar no Swagger UI, insira apenas o token JWT no cabeçalho da requisição com o esquema Bearer.
+    Exemplo: Dentro de Value, coloque o token.
+
+    Na API real, certifique-se de incluir explicitamente o prefixo 'Bearer' antes do token JWT.
+    Exemplo: Authorization: Bearer {token}
+        `,
+        name: 'Authorization',
+        in: 'header',
+      },
+      'access-token',
+    )
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
   SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

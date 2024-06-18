@@ -10,7 +10,7 @@ export interface Paciente {
   proficao: string;
   diagnosticoClinico: string;
   diagnosticoFisio: string;
-  PrimeiraConsulta: true;
+  primeiraConsulta: boolean;
   emailPaciente: string;
   tipoUsuario: number;
 }
