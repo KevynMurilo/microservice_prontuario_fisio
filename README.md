@@ -258,6 +258,8 @@ http://localhost:3000/prontuario/paciente/:id
 
 > Retorno com o codigo 404 (Not found): Paciente não encontrado
 
+> Retorno com o codigo 409 (Conflict): Id do agendamento já está em uso
+
 ### Rota DELETE para deletar o prontuario pelo o ID do paciente
 
 ```
@@ -319,6 +321,7 @@ http://localhost:3000/relatorios/paciente/:id
 
 > Retorno com o codigo 404 (Not found): Paciente não encontrado
 
+> Retorno com o codigo 409 (Conflict): Id do agendamento já está em uso
 
 ### Rota DELETE para deletar pelo Id do relatório
 
@@ -359,6 +362,7 @@ http://localhost:3000/fichaEvolucao/paciente/:id
 
 > Retorno com o codigo 404 (Not found): Ficha de evolução não encontrado
 
+
 ### Rota POST para ficha de evolução
 
 > Utilize o body no formato json para enviar cadastrar o prontuário.
@@ -380,6 +384,8 @@ http://localhost:3000/fichaEvolucao/paciente/:id
 > Retorno com o codigo 401 (Unauthorized): Token não encontrado ou inválido
 
 > Retorno com o codigo 404 (Not found): Paciente não encontrado
+
+> Retorno com o codigo 409 (Conflict): Id do agendamento já está em uso
 
 ### Rota DELETE para deletar pelo Id do relatório
 
