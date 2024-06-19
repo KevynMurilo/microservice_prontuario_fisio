@@ -8,9 +8,11 @@ export class ExamesFisicosRepository {
   async createExamesFisicos(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
+    id_prontuario: number,
   ) {
     return trx.exame_Fisico.create({
       data: {
+        id_exames_fisicos: id_prontuario,
         pa: createExamesFisicosDto.pa,
         fc: createExamesFisicosDto.fc,
         fr: createExamesFisicosDto.fr,
@@ -80,9 +82,11 @@ export class ExamesFisicosRepository {
   async createComplemento(
     trx: Prisma.TransactionClient,
     createComplementoDto: CreateComplementoDto,
+    id_prontuario: number,
   ) {
     return trx.complemento.create({
       data: {
+        id_complementos: id_prontuario,
         sensibilidade: createComplementoDto.sensibilidade,
         dor: createComplementoDto.dor,
         clonus: createComplementoDto.clonus,

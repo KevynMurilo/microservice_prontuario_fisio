@@ -64,7 +64,7 @@ model Prontuario {
 }
 
 model Anamnese {
-  id_anamnese           Int                   @id @default(autoincrement()) @unique
+  id_anamnese           Int                   @id @unique
   queixa_principal      String
   hma                   String
   hmp                   String
@@ -99,7 +99,7 @@ model Doenca_concomitante {
 }
 
 model Exame_Fisico {
-  id_exames_fisicos               Int              @id @default(autoincrement()) @unique
+  id_exames_fisicos               Int              @id @unique
   pa                              String
   fc                              String
   fr                              String
@@ -160,7 +160,7 @@ model Adm {
 }
 
 model Complemento {
-  id_complementos                 Int          @id @default(autoincrement()) @unique
+  id_complementos                 Int          @id @unique
   sensibilidade                   String
   dor                             Int
   clonus                          String

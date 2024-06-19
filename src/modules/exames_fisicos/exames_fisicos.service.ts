@@ -15,10 +15,12 @@ export class ExamesFisicosService {
   private async createExamesFisicos(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
+    id_prontuario: number,
   ): Promise<Exame_Fisico> {
     return await this.examesFisicosRepository.createExamesFisicos(
       trx,
       createExamesFisicosDto,
+      id_prontuario,
     );
   }
 
@@ -63,20 +65,24 @@ export class ExamesFisicosService {
   private async createComplemento(
     trx: Prisma.TransactionClient,
     createComplementoDto: CreateComplementoDto,
+    id_prontuario: number,
   ): Promise<CreateComplementoDto> {
     return this.examesFisicosRepository.createComplemento(
       trx,
       createComplementoDto,
+      id_prontuario,
     );
   }
 
   async create(
     trx: Prisma.TransactionClient,
     createExamesFisicosDto: CreateExamesFisicosDto,
+    id_prontuario: number,
   ): Promise<any> {
     const examesFisicos = await this.createExamesFisicos(
       trx,
       createExamesFisicosDto,
+      id_prontuario,
     );
 
     const forcaMuscular = await this.createForcaMuscular(
@@ -94,6 +100,7 @@ export class ExamesFisicosService {
     const complemento = await this.createComplemento(
       trx,
       createExamesFisicosDto.complemento,
+      id_prontuario,
     );
 
     return { examesFisicos, forcaMuscular, adm, complemento };
