@@ -6,8 +6,7 @@
 
 # Microservice_prontuario_fisio
 ## Modelagem
-![banco](https://github.com/KevynMurilo/microservice_prontuario_fisio/assets/132490286/8c34366b-c2a6-4c40-9532-c59da1d4c4be)
-
+![banco](https://github.com/KevynMurilo/microservice_prontuario_fisio/assets/132490286/8fef04e8-17a9-40a3-a321-b04ca18566ab)
 
 ## Resumo
 O código fornecido implementa um módulo abrangente de gerenciamento de prontuários fisioterapêuticos em uma aplicação NestJS. A API lida com a gestão de prontuários de pacientes e integra vários submódulos, como Anamnese, Exames Físicos, Objetivo e Condutas. Além disso, oferece funcionalidades para gerenciamento de relatórios e fichas de evolução dos pacientes.
