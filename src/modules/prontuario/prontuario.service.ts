@@ -74,11 +74,13 @@ export class ProntuarioService {
       const anamnese = await this.anamneseService.createFull(
         trx,
         createAnamneseDto,
+        prontuario.id_prontuario,
       );
 
       const examesFisicos = await this.examesFisicosService.create(
         trx,
         createExamesFisicosDto,
+        prontuario.id_prontuario,
       );
 
       const objetivos = await this.objetivosService.create(

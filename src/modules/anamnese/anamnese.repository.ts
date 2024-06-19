@@ -9,9 +9,11 @@ export class AnamneseRepository {
   async createAnamnese(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
+    id_prontuario: number,
   ) {
     return trx.anamnese.create({
       data: {
+        id_anamnese: id_prontuario,
         queixa_principal: createAnamneseDto.queixa_principal,
         hma: createAnamneseDto.hma,
         hmp: createAnamneseDto.hmp,
