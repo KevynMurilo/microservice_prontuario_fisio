@@ -1,22 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { Prisma } from '@prisma/client';
-import { CreateProntuarioDto } from './dto/create-prontuario.dto';
+import { Prisma, Prontuario } from '@prisma/client';
 
 @Injectable()
 export class ProntuarioRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getByAgendamento(id: number) {
-    return await this.prisma.prontuario.findUnique({
-      where: {
-        id_agendamento: id,
-        deleted_at: null,
-      },
-    });
-  }
-
-  async getByPaciente(id: number) {
+  async getByPaciente(
+    id: number,
+  ): Promise<Omit<Prontuario, 'created_at' | 'deleted_at'>> {
     return await this.prisma.prontuario.findUnique({
       where: {
         id_paciente: id,
@@ -44,6 +36,10 @@ export class ProntuarioRepository {
         independencia_de_locomocao: true,
         anamnese: {
           select: {
+            queixa_principal: true,
+            hma: true,
+            hmp: true,
+            avd: true,
             cirurgia: {
               select: {
                 realizou: true,
@@ -136,55 +132,16 @@ export class ProntuarioRepository {
 
   async createProntuario(
     trx: Prisma.TransactionClient,
-    createProntuarioDto: CreateProntuarioDto,
-  ) {
+    data: Prisma.ProntuarioCreateInput,
+  ): Promise<Prontuario> {
     return trx.prontuario.create({
-      data: {
-        id_agendamento: createProntuarioDto.id_agendamento,
-        id_paciente: createProntuarioDto.id_paciente,
-        id_fisioterapeuta: createProntuarioDto.id_fisioterapeuta,
-        unidade: createProntuarioDto.unidade,
-        setor_atendimento: createProntuarioDto.setor_atendimento,
-        responsavel: createProntuarioDto.responsavel,
-        caso_emergencia_avisar: createProntuarioDto.caso_emergencia_avisar,
-        telefone_emergencia: createProntuarioDto.telefone_emergencia,
-        diagnostico_clinico: createProntuarioDto.diagnostico_clinico,
-        medico_responsavel: createProntuarioDto.medico_responsavel,
-        diagnostico_fisoterapeuta:
-          createProntuarioDto.diagnostico_fisoterapeuta,
-        antecendentes_familiar: createProntuarioDto.antecendentes_familiar,
-        patologias_associadas: createProntuarioDto.patologias_associadas,
-        peso: createProntuarioDto.peso,
-        altura: createProntuarioDto.altura,
-        estado_geral: createProntuarioDto.estado_geral,
-        independencia_de_locomocao:
-          createProntuarioDto.independencia_de_locomocao,
-      },
-      select: {
-        id_prontuario: true,
-        id_agendamento: true,
-        id_paciente: true,
-        id_fisioterapeuta: true,
-        unidade: true,
-        setor_atendimento: true,
-        data: true,
-        responsavel: true,
-        caso_emergencia_avisar: true,
-        telefone_emergencia: true,
-        diagnostico_clinico: true,
-        medico_responsavel: true,
-        diagnostico_fisoterapeuta: true,
-        antecendentes_familiar: true,
-        patologias_associadas: true,
-        peso: true,
-        altura: true,
-        estado_geral: true,
-        independencia_de_locomocao: true,
-      },
+      data: data,
     });
   }
 
-  async findAll() {
+  async findAll(): Promise<
+    Array<Omit<Prontuario, 'created_at' | 'deleted_at'>>
+  > {
     return await this.prisma.prontuario.findMany({
       where: {
         deleted_at: null,
@@ -211,6 +168,10 @@ export class ProntuarioRepository {
         independencia_de_locomocao: true,
         anamnese: {
           select: {
+            queixa_principal: true,
+            hma: true,
+            hmp: true,
+            avd: true,
             cirurgia: {
               select: {
                 realizou: true,
@@ -301,8 +262,8 @@ export class ProntuarioRepository {
     });
   }
 
-  async delete(id_paciente: number) {
-    const prontuario = await this.prisma.prontuario.update({
+  async delete(id_paciente: number): Promise<Prontuario> {
+    return await this.prisma.prontuario.update({
       where: {
         id_paciente: id_paciente,
       },
@@ -310,6 +271,5 @@ export class ProntuarioRepository {
         deleted_at: new Date(),
       },
     });
-    return prontuario;
   }
 }

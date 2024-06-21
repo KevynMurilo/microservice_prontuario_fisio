@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidateNested, IsArray } from 'class-validator';
 import { CreateAnamneseDto } from 'src/modules/anamnese/dto/create-anamnese.dto';
-import { CreateExamesFisicosDto } from 'src/modules/exames_fisicos/dto/create-exames-fisicos.dto';
+import { CreateExamesFisicosDto } from 'src/modules/exames-fisicos/dto/create-exames-fisicos.dto';
 import { CreateObjetivoDto } from 'src/modules/objetivo/dto/create-objetivo.dto';
 import { CreateCondutaDto } from 'src/modules/condutas/dto/create-conduta.dto';
 import { CreateProntuarioDto } from './create-prontuario.dto';

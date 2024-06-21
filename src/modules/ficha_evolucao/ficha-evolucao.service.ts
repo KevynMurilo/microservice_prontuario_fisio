@@ -24,7 +24,7 @@ export class FichaEvolucaoService {
     const user = req.user;
     const id_fisioterapeuta = Number(user.UserId);
 
-    const paciente = await this.pacienteService.getPacienteId(
+    const paciente = await this.pacienteService.getPacienteIdApiAuth(
       createFichaEvolucaoDto.id_paciente,
       req.headers.authorization,
     );

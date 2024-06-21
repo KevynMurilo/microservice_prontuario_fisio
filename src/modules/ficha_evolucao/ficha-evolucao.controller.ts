@@ -8,7 +8,7 @@ import {
   NotFoundException,
   Req,
 } from '@nestjs/common';
-import { FichaEvolucaoService } from './ficha_evolucao.service';
+import { FichaEvolucaoService } from './ficha-evolucao.service';
 import { CreateFichaEvolucaoDto } from './dto/create-ficha_evolucao.dto';
 import {
   ApiBearerAuth,

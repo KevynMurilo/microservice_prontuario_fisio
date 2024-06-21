@@ -6,11 +6,11 @@ import {
 import { ProntuarioRepository } from './prontuario.repository';
 import { CreateProntuarioDto } from './dto/create-prontuario.dto';
 import { PrismaService } from '../database/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Prontuario } from '@prisma/client';
 import { AnamneseService } from '../anamnese/anamnese.service';
 import { CreateAnamneseDto } from '../anamnese/dto/create-anamnese.dto';
-import { ExamesFisicosService } from '../exames_fisicos/exames_fisicos.service';
-import { CreateExamesFisicosDto } from '../exames_fisicos/dto/create-exames-fisicos.dto';
+import { ExamesFisicosService } from '../exames-fisicos/exames-fisicos.service';
+import { CreateExamesFisicosDto } from '../exames-fisicos/dto/create-exames-fisicos.dto';
 import { ObjetivoService } from '../objetivo/objetivo.service';
 import { CreateObjetivoDto } from '../objetivo/dto/create-objetivo.dto';
 import { CondutasService } from '../condutas/condutas.service';
@@ -35,7 +35,7 @@ export class ProntuarioService {
   private async createProntuario(
     trx: Prisma.TransactionClient,
     createProntuarioDto: CreateProntuarioDto,
-  ) {
+  ): Promise<Prontuario> {
     const verify = await this.prontuarioRepository.getByPaciente(
       createProntuarioDto.id_paciente,
     );
@@ -56,7 +56,7 @@ export class ProntuarioService {
     const user = req.user;
     const id_fisioterapeuta = Number(user.UserId);
 
-    await this.pacienteService.getPacienteId(
+    await this.pacienteService.getPacienteIdApiAuth(
       createProntuarioDto.id_paciente,
       req.headers.authorization,
     );
@@ -71,7 +71,7 @@ export class ProntuarioService {
         id_fisioterapeuta: id_fisioterapeuta,
       });
 
-      const anamnese = await this.anamneseService.createFull(
+      const anamnese = await this.anamneseService.create(
         trx,
         createAnamneseDto,
         prontuario.id_prontuario,

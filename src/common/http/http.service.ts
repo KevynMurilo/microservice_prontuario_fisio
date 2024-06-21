@@ -14,4 +14,8 @@ export class HttpService {
   post<T>(url: string, data: any): Observable<AxiosResponse<T>> {
     return this.httpService.post<T>(url, data);
   }
+
+  patch<T>(url: string, data: any): Observable<AxiosResponse<T>> {
+    return this.httpService.patch<T>(url, data);
+  }
 }

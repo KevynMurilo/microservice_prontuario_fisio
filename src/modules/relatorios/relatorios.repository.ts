@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { CreateRelatorioDto } from './dto/create-relatorio.dto';
+import { Prisma, Relatorio } from '@prisma/client';
 
 @Injectable()
 export class RelatoriosRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByRelatorio(id_relatorio) {
+  async findByRelatorio(id_relatorio): Promise<Relatorio> {
     return await this.prisma.relatorio.findUnique({
       where: {
         id_relatorio: id_relatorio,
@@ -15,18 +15,13 @@ export class RelatoriosRepository {
     });
   }
 
-  async create(createRelatorioDto: CreateRelatorioDto) {
+  async create(data: Prisma.RelatorioCreateInput): Promise<Relatorio> {
     return await this.prisma.relatorio.create({
-      data: {
-        id_agendamento: createRelatorioDto.id_agendamento,
-        id_paciente: createRelatorioDto.id_paciente,
-        id_fisioterapeuta: createRelatorioDto.id_fisioterapeuta,
-        descricao: createRelatorioDto.descricao,
-      },
+      data: data,
     });
   }
 
-  async findMany() {
+  async findMany(): Promise<Relatorio[]> {
     return await this.prisma.relatorio.findMany({
       where: {
         deleted_at: null,
@@ -34,7 +29,7 @@ export class RelatoriosRepository {
     });
   }
 
-  async findByPaciente(id_paciente: number) {
+  async findByPaciente(id_paciente: number): Promise<Relatorio[]> {
     return await this.prisma.relatorio.findMany({
       where: {
         id_paciente: id_paciente,
@@ -43,7 +38,7 @@ export class RelatoriosRepository {
     });
   }
 
-  async delete(id_relatorio: number) {
+  async delete(id_relatorio: number): Promise<Relatorio> {
     return await this.prisma.relatorio.update({
       where: {
         id_relatorio: id_relatorio,
