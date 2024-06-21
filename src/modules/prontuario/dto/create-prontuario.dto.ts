@@ -26,7 +26,7 @@ export class CreateProntuarioDto {
   @IsNotEmpty({ message: 'Id do paciente é obrigatório' })
   id_paciente: number;
 
-  id_fisioterapeuta?: number;
+  id_fisioterapeuta: number;
 
   @ApiProperty({ example: 'Responsável X', description: 'Nome do responsável' })
   @IsOptional()

@@ -24,16 +24,15 @@ export class RelatoriosService {
     const user = req.user;
     const id_fisioterapeuta = Number(user.UserId);
 
-    const paciente = await this.pacienteService.getPacienteId(
+    const paciente = await this.pacienteService.getPacienteIdApiAuth(
       createRelatorioDto.id_paciente,
       req.headers.authorization,
     );
 
-    if (paciente.data.primeiraConsulta) {
+    if (paciente.data.primeiraConsulta)
       throw new BadRequestException(
         'Paciente só pode ter relatorio após a primeira consulta',
       );
-    }
 
     await this.verificarIdAgendamento.verify(createRelatorioDto.id_agendamento);
 

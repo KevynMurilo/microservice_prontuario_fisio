@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { FichaEvolucaoService } from './ficha_evolucao.service';
-import { FichaEvolucaoController } from './ficha_evolucao.controller';
+import { FichaEvolucaoService } from './ficha-evolucao.service';
+import { FichaEvolucaoController } from './ficha-evolucao.controller';
 import { FichaEvolucaoRepository } from './ficha-evolucao.repository';
 import { PrismaService } from '../database/prisma.service';
 import { PacienteModule } from '../paciente/paciente.module';

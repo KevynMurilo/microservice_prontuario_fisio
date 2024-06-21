@@ -6,7 +6,7 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { HttpService } from 'src/common/http/http.service';
 import { Paciente } from './interfaces/paciente.interface';
 
@@ -17,14 +17,12 @@ export class PacienteService {
     @Inject('PACIENTE_URL') private readonly pacienteUrl: string,
   ) {}
 
-  async getPacienteId(id_paciente: number, token: string) {
+  async getPacienteIdApiAuth(id_paciente: number, token: string) {
     const url = `${this.pacienteUrl}/Paciente/${id_paciente}`;
-    const headers = {
-      Authorization: token,
-    };
+    const headers = { Authorization: token };
 
     try {
-      const response = await lastValueFrom(
+      const response = await firstValueFrom(
         this.httpService.get<Paciente>(url, { headers }),
       );
 
@@ -33,20 +31,29 @@ export class PacienteService {
 
       return response;
     } catch (error) {
-      if (error.response && error.response.status === 401)
-        throw new UnauthorizedException(
-          'Token de autenticação inválido ou expirado',
-        );
-
-      if (error.code === 'ECONNREFUSED')
-        throw new ServiceUnavailableException(
-          'O serviço de autenticação está indisponível no momento. Por favor, tente novamente mais tarde.',
-        );
-
-      if (error.response.status === 404)
-        throw new NotFoundException('Paciente não encontrado');
-
-      throw new BadRequestException('Erro ao buscar paciente');
+      this.httpError(error);
     }
+  }
+
+  private httpError(error: any): void {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          throw new UnauthorizedException(
+            'Token de autenticação inválido ou expirado',
+          );
+        case 404:
+          throw new NotFoundException('Paciente não encontrado');
+        default:
+          throw new BadRequestException('Erro ao buscar paciente');
+      }
+    }
+
+    if (error.code === 'ECONNREFUSED') {
+      throw new ServiceUnavailableException(
+        'O serviço de autenticação está indisponível no momento. Por favor, tente novamente mais tarde.',
+      );
+    }
+    throw new BadRequestException('Erro ao buscar paciente');
   }
 }

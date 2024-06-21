@@ -7,16 +7,15 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '../common/jwt/jwt.service';
 
 @Injectable()
-export class RoleMiddleware implements NestMiddleware {
+export class IsFisioterapeuta implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
 
     const token = this.jwtService.extractTokenFromHeader(authHeader);
-    if (!token) {
+    if (!token)
       throw new UnauthorizedException('Token não encontrado ou inválido');
-    }
 
     try {
       const decoded = this.jwtService.verifyToken(token);

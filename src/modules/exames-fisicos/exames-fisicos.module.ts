@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ExamesFisicosService } from './exames_fisicos.service';
+import { ExamesFisicosService } from './exames-fisicos.service';
 import { ExamesFisicosRepository } from './exames-fisicos.repository';
 
 @Module({

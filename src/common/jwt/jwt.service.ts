@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { User } from '../interfaces/user.interface';
 
@@ -21,7 +25,7 @@ export class JwtService {
       }
       return decoded;
     } catch (error) {
-      throw new BadRequestException('Token inválido');
+      throw new UnauthorizedException('Token inválido');
     }
   }
 }
