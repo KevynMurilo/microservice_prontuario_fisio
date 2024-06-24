@@ -8,6 +8,15 @@
 ## Modelagem
 ![banco](https://github.com/KevynMurilo/microservice_prontuario_fisio/assets/132490286/8fef04e8-17a9-40a3-a321-b04ca18566ab)
 
+## Microserviço de Autenticação para Fisioterapia
+
+Este microserviço gerencia a autenticação de fisioterapeutas, fornece tokens de acesso e realiza validações necessárias para o sistema de prontuário.
+
+- **GitHub:** [Repositório do Microserviço de Autenticação para Fisioterapia](https://github.com/GeanVitorM/Authetication.Server)
+
+É necessário para garantir a segurança e integridade das operações relacionadas aos pacientes e profissionais de fisioterapia.
+
+
 ## Resumo
 O código fornecido implementa um módulo abrangente de gerenciamento de prontuários fisioterapêuticos em uma aplicação NestJS. A API lida com a gestão de prontuários de pacientes e integra vários submódulos, como Anamnese, Exames Físicos, Objetivo e Condutas. Além disso, oferece funcionalidades para gerenciamento de relatórios e fichas de evolução dos pacientes.
 
