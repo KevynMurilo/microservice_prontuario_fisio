@@ -95,6 +95,11 @@ export class ProntuarioService {
         prontuario.id_prontuario,
       );
 
+      await this.pacienteService.updatePacientePrimeiraConsulta(
+        createProntuarioDto.id_paciente,
+        req.headers.authorization,
+      );
+
       return { prontuario, anamnese, examesFisicos, objetivos, condutas };
     });
   }

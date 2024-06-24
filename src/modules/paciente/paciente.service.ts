@@ -35,6 +35,20 @@ export class PacienteService {
     }
   }
 
+  async updatePacientePrimeiraConsulta(id_paciente: number, token: string) {
+    const url = `${this.pacienteUrl}/Paciente/${id_paciente}/PrimeiraConsulta`;
+    const headers = { Authorization: token };
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.patch<Paciente>(url, null, { headers }),
+      );
+      return response;
+    } catch (error) {
+      this.httpError(error);
+    }
+  }
+
   private httpError(error: any): void {
     if (error.response) {
       switch (error.response.status) {
