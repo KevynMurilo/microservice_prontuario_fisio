@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { ProntuarioRepository } from './prontuario.repository';
@@ -65,38 +66,58 @@ export class ProntuarioService {
       createProntuarioDto.id_agendamento,
     );
 
-    return this.prisma.$transaction(async (trx: Prisma.TransactionClient) => {
-      const prontuario = await this.createProntuario(trx, {
-        ...createProntuarioDto,
-        id_fisioterapeuta: id_fisioterapeuta,
-      });
+    let transactionResult: { prontuario: Prontuario } | null = null;
 
-      const anamnese = await this.anamneseService.create(
-        trx,
-        createAnamneseDto,
-        prontuario.id_prontuario,
+    try {
+      transactionResult = await this.prisma.$transaction(
+        async (trx: Prisma.TransactionClient) => {
+          const prontuario = await this.createProntuario(trx, {
+            ...createProntuarioDto,
+            id_fisioterapeuta: id_fisioterapeuta,
+          });
+
+          const anamnese = await this.anamneseService.createFull(
+            trx,
+            createAnamneseDto,
+            prontuario.id_prontuario,
+          );
+
+          const examesFisicos = await this.examesFisicosService.create(
+            trx,
+            createExamesFisicosDto,
+            prontuario.id_prontuario,
+          );
+
+          const objetivos = await this.objetivosService.create(
+            trx,
+            createObjetivoDto,
+            prontuario.id_prontuario,
+          );
+
+          const condutas = await this.condutasService.create(
+            trx,
+            createCondutaDto,
+            prontuario.id_prontuario,
+          );
+
+          await this.pacienteService.updatePacientePrimeiraConsulta(
+            createProntuarioDto.id_paciente,
+            req.headers.authorization,
+          );
+
+          return { prontuario, anamnese, examesFisicos, objetivos, condutas };
+        },
       );
 
-      const examesFisicos = await this.examesFisicosService.create(
-        trx,
-        createExamesFisicosDto,
-        prontuario.id_prontuario,
+      return transactionResult;
+    } catch (error) {
+      if (transactionResult && transactionResult.prontuario) {
+        await this.deleteCascade(transactionResult.prontuario.id_prontuario);
+      }
+      throw new InternalServerErrorException(
+        `Erro interno de servidor ${error.message}`,
       );
-
-      const objetivos = await this.objetivosService.create(
-        trx,
-        createObjetivoDto,
-        prontuario.id_prontuario,
-      );
-
-      const condutas = await this.condutasService.create(
-        trx,
-        createCondutaDto,
-        prontuario.id_prontuario,
-      );
-
-      return { prontuario, anamnese, examesFisicos, objetivos, condutas };
-    });
+    }
   }
 
   async findall() {
@@ -113,7 +134,7 @@ export class ProntuarioService {
     return prontuario;
   }
 
-  async delete(
+  async deleteParanoid(
     id_paciente: number,
   ): Promise<NotFoundException | { message: string }> {
     const prontuarioExists =
@@ -123,5 +144,10 @@ export class ProntuarioService {
 
     await this.prontuarioRepository.delete(id_paciente);
     return { message: 'Prontuario deletado com sucesso' };
+  }
+
+  private async deleteCascade(id_prontuario: number) {
+    await this.prontuarioRepository.deleteCascade(id_prontuario);
+    return { message: 'Cascade bem sucedido' };
   }
 }

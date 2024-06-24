@@ -111,7 +111,8 @@ export class ProntuarioController {
     description: 'Prontuário não encontrado',
   })
   async delete(@Param('id') id_paciente: number) {
-    const prontuario = await this.prontuarioService.delete(+id_paciente);
+    const prontuario =
+      await this.prontuarioService.deleteParanoid(+id_paciente);
     return prontuario;
   }
 }

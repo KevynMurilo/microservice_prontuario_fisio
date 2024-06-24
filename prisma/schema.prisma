@@ -69,7 +69,7 @@ model Anamnese {
   hma                   String
   hmp                   String
   avd                   String
-  prontuario            Prontuario            @relation(fields: [id_anamnese], references: [id_prontuario])
+  prontuario            Prontuario            @relation(fields: [id_anamnese], references: [id_prontuario], onDelete: Cascade)
   cirurgia              Cirurgia[]
   doencas_concomitantes Doenca_concomitante[]
 
@@ -82,7 +82,7 @@ model Cirurgia {
   realizou          Boolean
   quais             String?
   resultados_exames String?
-  anamnese          Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
+  anamnese          Anamnese @relation(fields: [id_anamnese], references: [id_anamnese], onDelete: Cascade)
 
   @@map("cirurgias")
 }
@@ -93,7 +93,7 @@ model Doenca_concomitante {
   dm                       Boolean
   has                      Boolean
   outros                   String?
-  anamnese                 Anamnese @relation(fields: [id_anamnese], references: [id_anamnese])
+  anamnese                 Anamnese @relation(fields: [id_anamnese], references: [id_anamnese], onDelete: Cascade)
 
   @@map("doencas_concomitantes")
 }
@@ -131,7 +131,7 @@ model Exame_Fisico {
   mensuracao                      String?
   adm                             Adm[]
   complementos                    Complemento?
-  prontuario                      Prontuario       @relation(fields: [id_exames_fisicos], references: [id_prontuario])
+  prontuario                      Prontuario       @relation(fields: [id_exames_fisicos], references: [id_prontuario], onDelete: Cascade)
   forca_muscular                  Forca_muscular[]
 
   @@map("exames_fisicos")
@@ -143,7 +143,7 @@ model Forca_muscular {
   musculo           String?
   grupo             String?
   grau              String?
-  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos], onDelete: Cascade)
 
   @@map("forca_muscular")
 }
@@ -154,7 +154,7 @@ model Adm {
   movimento         String?
   ativa             String?
   passiva           String?
-  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos])
+  exames_fisicos    Exame_Fisico @relation(fields: [id_exames_fisicos], references: [id_exames_fisicos], onDelete: Cascade)
 
   @@map("adm")
 }
@@ -170,7 +170,7 @@ model Complemento {
   avaliacao_funcional             String
   observacoes                     String?
   exames_complementares_ou_laudos String?
-  exames_fisicos                  Exame_Fisico @relation(fields: [id_complementos], references: [id_exames_fisicos])
+  exames_fisicos                  Exame_Fisico @relation(fields: [id_complementos], references: [id_exames_fisicos], onDelete: Cascade)
 
   @@map("complementos")
 }
@@ -179,7 +179,7 @@ model Objetivo {
   id_objetivo                         Int        @id @default(autoincrement())
   id_prontuario                       Int
   descricao_objetivo_fisioterapeutico String
-  prontuario                          Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
+  prontuario                          Prontuario @relation(fields: [id_prontuario], references: [id_prontuario], onDelete: Cascade)
 
   @@map("objetivos")
 }
@@ -188,7 +188,7 @@ model Conduta {
   id_conduta                         Int        @id @default(autoincrement())
   id_prontuario                      Int
   descricao_conduta_fisioterapeutica String
-  prontuario                         Prontuario @relation(fields: [id_prontuario], references: [id_prontuario])
+  prontuario                         Prontuario @relation(fields: [id_prontuario], references: [id_prontuario], onDelete: Cascade)
 
   @@map("condutas")
 }

@@ -57,7 +57,7 @@ export class AnamneseService {
     return results;
   }
 
-  async create(
+  async createFull(
     trx: Prisma.TransactionClient,
     createAnamneseDto: CreateAnamneseDto,
     id_prontuario: number,
