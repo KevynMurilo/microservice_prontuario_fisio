@@ -272,4 +272,16 @@ export class ProntuarioRepository {
       },
     });
   }
+
+  async deleteCascade(id_prontuario: number) {
+    return await this.prisma.prontuario.delete({
+      where: { id_prontuario: id_prontuario },
+      include: {
+        anamnese: true,
+        exampes_fisicos: true,
+        objetivo: true,
+        conduta: true,
+      },
+    });
+  }
 }

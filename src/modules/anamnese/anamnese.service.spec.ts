@@ -76,7 +76,7 @@ describe('AnamneseService', () => {
         doencaMock,
       );
 
-      const result = await service.create(
+      const result = await service.createFull(
         trx,
         createAnamneseDto,
         id_prontuario,
